@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS `bidding` DEFAULT CHARACTER SET latin1 COLLATE lat
 USE `bidding`;
 
 CREATE TABLE if not exists bidItem 
-(bidID int not null auto_increment,
+(bidID int not null,
 productID varchar(100) not null,
 sellerID varchar(10) not null,
 buyerID varchar(10) not null,
