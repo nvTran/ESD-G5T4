@@ -45,7 +45,7 @@ def seller_view_bids(sellerID):
     to_return = jsonify({"all_bids": [bid.json() for bid in all_bids]})
     return render_template("seller_view_bids.html", all_bids = to_return)
 
-@app.route("/place_bids/<string:productID>", methods=['POST',"GET"])
+@app.route("/place_bid/<string:productID>", methods=['POST',"GET"])
 def place_bids(productID):
     # authenticate first
     if request == 'POST':

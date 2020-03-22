@@ -34,11 +34,11 @@ class Product(db.Model):
         return {"productID": self.productID, "sellerID": self.userID, "productName": self.productName, "productType": self.productType,"productDesc": self.productDesc, "meetup": self.meetup }
 
 
-@app.route("/seller_view_bids/<string:sellerID>")
-def seller_view_bids(sellerID):
+@app.route("/all_product/<string:userID>")
+def getProductByUserId:
     # authenticate first
-    all_bids = ListBid.query.filter_by(sellerID=sellerID).first()
-    return render_template(seller_view_bids.html, **all_bids)
+    all_products = Product.query.filter_by(userID=userID).first()
+    return render_template(all_product.html, **all_products)
 
  
 if __name__ == '__main__':
