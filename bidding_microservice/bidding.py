@@ -55,11 +55,6 @@ def place_bids(productID):
         db.session.add(me)
         db.session.commit()
 
-        # a ăn nói cẩn thận mà
-        # tự dưng đe dọa a!!??
-        
-        
-
         # place bid here
         # redirect to product page with status change
         return redirect(url_for('upload_image', filename=filename))
