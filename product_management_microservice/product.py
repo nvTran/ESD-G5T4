@@ -7,38 +7,38 @@ from flask_sqlalchemy import SQLAlchemy
 
 model = None
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/ListBid'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/listing'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
 
 class Product(db.Model):
-    __tablename__ = 'listing'
+    __tablename__ = 'postItem'
  
     productID = db.Column(db.String(100), primary_key=True)
-    sellerID = db.Column(db.String(10), nullable=False)
-    description = db.Column(db.String(100), nullable=False)
-    dateListed = db.Column(db.Datetime, nullable=False)
-    buyerID = db.Column(db.String(10), nullable=False)
-    bid_amount = db.Column(db.String(100), nullable=False)
+    userID = db.Column(db.String(10), primary_key=True)
+    productName = db.Column(db.String(100), nullable=False)
+    productType = db.Column(db.String(20), nullable=False)
+    productDesc = db.Column(db.String(500), nullable=True)
+    meetup = db.Column(db.String(100), nullable=False)
  
-    def __init__(self, productID, sellerID, description, dateListed, buyerID, bid_amount):
+    def __init__(self, productID, userID, productName, productType, productDesc, meetup):
         self.productID = productID
-        self.sellerID = sellerID
-        self.description = description
-        self.dateListed = dateListed
-        self.buyerID = buyerID
-        self.bid_amount = bid_amount
+        self.userID = userID
+        self.productName = productName
+        self.productType = productType
+        self.productDesc = productDesc
+        self.meetup = meetup
 
     def json(self):
-        return {"productID": self.productID, "sellerID": self.sellerID, "description": self.description, "dateListed": self.dateListed,"buyerID": self.buyerID, "bid_amount": self.bid_amount }
+        return {"productID": self.productID, "sellerID": self.userID, "productName": self.productName, "productType": self.productType,"productDesc": self.productDesc, "meetup": self.meetup }
 
 
-@app.route("/seller_view_bids/<string:sellerID>")
-def seller_view_bids(sellerID):
+@app.route("/all_product/<string:userID>")
+def getProductByUserId:
     # authenticate first
-    all_bids = ListBid.query.filter_by(sellerID=sellerID).first()
-    return render_template(seller_view_bids.html, **all_bids)
+    all_products = Product.query.filter_by(userID=userID).first()
+    return render_template(all_product.html, **all_products)
 
  
 if __name__ == '__main__':
