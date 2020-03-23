@@ -17,10 +17,19 @@ src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
 integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
 crossorigin="anonymous">    
     // get all bids variables from Flask
-    var all_products = '{{all_products}}';
+    
 </script>
 </head>
     <h1>This is a page to see all products of a seller</h1>
+    <script>
+        var all_products = JSON.parse('{{all_product}}');
+        console.log(all_products)
+        for (let index = 0; index < all_products.length; index++) {
+            var element = all_products[index];
+            console.log(element)
+        }
+        
+    </script>
 </body>
 </html>
 

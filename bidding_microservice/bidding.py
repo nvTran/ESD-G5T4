@@ -37,8 +37,12 @@ class ListBid(db.Model):
     def json(self):
         return {"bidID": self.bidID, "productID": self.productID, "sellerID": self.sellerID, "bidDateTime": self.bidDateTime, "buyerID": self.buyerID, "bidAmt": self.bidAmt, "bidStatus": self.bidStatus, "meetup": self.bidStatus }
 
+@app.route("/")
+def say_hello():
+    return "This is bidding microservice"
 
-@app.route("/seller_view_bids/<string:sellerID>")
+
+@app.route("/seller_view_bids/<string:sellerID>", methods=['POST',"GET"])
 def seller_view_bids(sellerID):
     # authenticate first
     all_bids = ListBid.query.filter_by(sellerID=sellerID).all()
@@ -47,17 +51,16 @@ def seller_view_bids(sellerID):
 
 @app.route("/place_bid/<string:productID>", methods=['POST',"GET"])
 def place_bids(productID):
-    # authenticate first
+    # authenticate first to get buyerID
     if request == 'POST':
-        data = request.bid_amount
+        bidAmt = request.form['bidAmt']
+        meetup = request.form['meetup']
 
-        me = ListBid(uuid.uuid4(), productID, sellerID, buyerID, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, "Toa Payoh")
-        db.session.add(me)
+        add_bid = ListBid(uuid.uuid4(), productID, sellerID, buyerID, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, meetup)
+        db.session.add(add_bid)
         db.session.commit()
-
-        # place bid here
         # redirect to product page with status change
-        return redirect(url_for('upload_image', filename=filename))
+        return redirect(url_for('/'))
 
     if request == 'GET':
         # view the page to place bid 
@@ -68,5 +71,24 @@ def place_bids(productID):
 
     return render_template("place_bid.html")
  
+@app.route("/place_bid/<string:productID>", methods=["GET"])
+def update_bid_resultd(productID):
+    # change product status to pending
+    # change failed bid status from pending to failed
+    # change successful bid status from pending to accepted, pending paynent, create new entry for transaction db
+    # once transaction completed, change bid to successful and product status to closed
+    
+    return 
+
+
+
+
+
+
+@app.route("/check_if_bid_exist_for_a_product/<string:productID>", methods=['GET'])
+def check_if_bid_exist_for_a_product(productID):
+    # get userID from authentication
+
+
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

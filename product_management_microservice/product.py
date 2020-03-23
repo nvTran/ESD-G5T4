@@ -20,26 +20,37 @@ class Product(db.Model):
     productName = db.Column(db.String(100), nullable=False)
     productType = db.Column(db.String(20), nullable=False)
     productDesc = db.Column(db.String(500), nullable=True)
+    productStatus = db.Column(db.String(20), nullable=False)
     meetup = db.Column(db.String(100), nullable=False)
  
-    def __init__(self, productID, userID, productName, productType, productDesc, meetup):
+    def __init__(self, productID, userID, productName, productType, productDesc, productStatus, meetup):
         self.productID = productID
         self.userID = userID
         self.productName = productName
         self.productType = productType
         self.productDesc = productDesc
+        self.productStatus = productStatus
         self.meetup = meetup
 
     def json(self):
-        return {"productID": self.productID, "sellerID": self.userID, "productName": self.productName, "productType": self.productType,"productDesc": self.productDesc, "meetup": self.meetup }
+        return {"productID": self.productID, "sellerID": self.userID, "productName": self.productName, "productType": self.productType,"productDesc": self.productDesc, "productStatus": self.productStatus, "meetup": self.meetup }
 
+
+@app.route("/")
+def welcome():
+    return "Hello there"
 
 @app.route("/all_product/<string:userID>")
-def getProductByUserId:
-    # authenticate first
-    all_products = Product.query.filter_by(userID=userID).first()
-    return render_template(all_product.html, **all_products)
+def all_products(userID):
+    return render_template("all_products.html", userID = userID)
 
+@app.route("/getProductByUserId/<string:userID>", methods=["GET"])
+def getProductByUserId(userID):
+    # authenticate first
+    all_products = Product.query.filter_by(userID=userID).all()
+    return jsonify({"all_products": [product.json() for product in all_products]})
+
+def getProduct
  
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5001, debug=True)
