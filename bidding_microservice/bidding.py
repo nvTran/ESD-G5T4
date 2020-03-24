@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, flash, redirect, url_for
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import uuid
+import datetime
 
 
 model = None
@@ -15,7 +16,7 @@ CORS(app)
 class ListBid(db.Model):
     __tablename__ = 'bidItem'
     bidID = db.Column(db.String(10), primary_key=True)
-    productID = db.Column(db.String(100), primary_key=True)
+    productID = db.Column(db.String(100), nullable=False)
     sellerID = db.Column(db.String(10), nullable=False)
     bidDateTime = db.Column(db.String(20), nullable=False)
     buyerID = db.Column(db.String(10), nullable=False)
@@ -24,7 +25,7 @@ class ListBid(db.Model):
     meetup = db.Column(db.String(100), nullable=False)
 
  
-    def __init__(self, bidID, productID, sellerID, bidDateTime, buyerID, bidAmt, bidStatus, meetup):
+    def __init__(self, bidID, productID, sellerID, buyerID, bidDateTime, bidAmt, bidStatus, meetup):
         self.bidID = bidID
         self.productID = productID
         self.sellerID = sellerID
@@ -43,26 +44,27 @@ def say_hello():
 
 
 @app.route("/seller_view_bids/<string:sellerID>", methods=['POST',"GET"])
-def seller_view_bids(sellerID):
+def seller_view_bids(productID):
     # authenticate first
-    all_bids = ListBid.query.filter_by(sellerID=sellerID).all()
+    all_bids = ListBid.query.filter_by(productID=productID).all()
     to_return = jsonify({"all_bids": [bid.json() for bid in all_bids]})
     return render_template("seller_view_bids.html", all_bids = to_return)
 
 @app.route("/place_bid/<string:productID>", methods=['POST',"GET"])
 def place_bids(productID):
     # authenticate first to get buyerID
-    if request == 'POST':
+
+    if request.method == 'POST':
         bidAmt = request.form['bidAmt']
         meetup = request.form['meetup']
 
-        add_bid = ListBid(uuid.uuid4(), productID, sellerID, buyerID, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, meetup)
+        add_bid = ListBid(str(uuid.uuid4())[:10], productID, "123", "357", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, "pending", meetup)
         db.session.add(add_bid)
         db.session.commit()
         # redirect to product page with status change
-        return redirect(url_for('/'))
+        return "bid_placed"
 
-    if request == 'GET':
+    if request.method == 'GET':
         # view the page to place bid 
         to_return = ListBid.query.filter_by(productID=productID).first()
         return render_template("place_bid.html", product_info = to_return)
@@ -72,22 +74,25 @@ def place_bids(productID):
     return render_template("place_bid.html")
  
 @app.route("/place_bid/<string:productID>", methods=["GET"])
-def update_bid_resultd(productID):
-    # change product status to pending
-    # change failed bid status from pending to failed
-    # change successful bid status from pending to accepted, pending paynent, create new entry for transaction db
-    # once transaction completed, change bid to successful and product status to closed
-    
-    return 
+def change_bid_status_for_successful_bids(productID,bidID):
+    all_bids = ListBid.query.filter_by(productID=productID).all()
+    if all_bids: 
+        for bid in all_bids:
+            if bid.bidID == bidID:
+                bid.bidStatus = 'successful'
+                db.session.commit()
+            bid.bidStatus = 'failed'
+            db.session.commit()
+        return jsonify({"message": "successfully updated bid status for all bids"}), 200
+    return jsonify({"message": "couldnot find any bids for the productID specified"}), 200
 
 
 
 
+# @app.route("/check_if_bid_exist_for_a_product/<string:productID>", methods=['GET'])
+# def check_if_bid_exist_for_a_product(productID):
+#     # get userID from authentication
 
-
-@app.route("/check_if_bid_exist_for_a_product/<string:productID>", methods=['GET'])
-def check_if_bid_exist_for_a_product(productID):
-    # get userID from authentication
 
 
 if __name__ == '__main__':

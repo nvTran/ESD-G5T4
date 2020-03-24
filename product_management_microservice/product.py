@@ -50,7 +50,21 @@ def getProductByUserId(userID):
     all_products = Product.query.filter_by(userID=userID).all()
     return jsonify({"all_products": [product.json() for product in all_products]})
 
-def getProduct
- 
+def update_product_status_after_seller_confirms_offer(productID):
+    # change product status to pending
+    # change failed bid status from pending to failed
+    # change successful bid status from pending to accepted, pending paynent, create new entry for transaction db
+    # once transaction completed, change bid to successful and product status to closed
+
+    product_queried = Product.query.filter_by(productID =productID).first()
+    product_queried.productStatus = 'pending'
+    db.session.commit()
+
+    
+    return 
+
+
+
+
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
