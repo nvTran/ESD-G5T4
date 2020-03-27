@@ -40,6 +40,8 @@ class Product(db.Model):
 def welcome():
     return "Hello there"
 
+@app.route("/postNewItem/<string:userID>")
+
 @app.route("/all_product/<string:userID>")
 def all_products(userID):
     return render_template("all_products.html", userID = userID)
