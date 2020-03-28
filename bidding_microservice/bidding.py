@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 import datetime
+import googlemaps
 
 
 model = None
@@ -56,9 +57,16 @@ def place_bids(productID):
 
     if request.method == 'POST':
         bidAmt = request.form['bidAmt']
-        meetup = request.form['meetup']
+        # meetup = request.form['meetup']
 
-        add_bid = ListBid(str(uuid.uuid4())[:10], productID, "123", "357", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, "pending", meetup)
+        gmaps = googlemaps.Client(key='AIzaSyDgHcefqn02VGMnzpAX3jBXoAoWvuLF3c0')
+        longitude = request.form['longitude']
+        print(longitude)
+        latitude = request.form['latitude']
+        reverse_geocode_result = gmaps.reverse_geocode((float(latitude),float(longitude)))
+
+
+        add_bid = ListBid(str(uuid.uuid4())[:10], productID, "123", "357", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, "pending", str(reverse_geocode_result))
         db.session.add(add_bid)
         db.session.commit()
         # redirect to product page with status change
@@ -87,12 +95,10 @@ def change_bid_status_for_successful_bids(productID,bidID):
     return jsonify({"message": "couldnot find any bids for the productID specified"}), 200
 
 
-
-
-# @app.route("/check_if_bid_exist_for_a_product/<string:productID>", methods=['GET'])
-# def check_if_bid_exist_for_a_product(productID):
-#     # get userID from authentication
-
+@app.route("/views_bid_and_status_by_userID/<string:buyerID>", methods=["GET"])
+def get_bids_and_status_by_buyerID(buyerID):
+    all_bids = ListBid.query.filter_by(buyerID=buyerID).first()
+    return jsonify({"all_bids": [bid.json() for bid in all_bids]}), 200
 
 
 if __name__ == '__main__':

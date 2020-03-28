@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask import Flask, request, render_template, flash, redirect, url_for
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+import googlemaps
+from datetime import datetime
 
 
 
@@ -38,7 +40,7 @@ class Product(db.Model):
 
 @app.route("/")
 def welcome():
-    return "Hello there"
+    return "Hello there, this is product microservice"
 
 @app.route("/all_product/<string:userID>")
 def all_products(userID):
@@ -50,9 +52,9 @@ def getProductByUserId(userID):
     all_products = Product.query.filter_by(userID=userID).all()
     return jsonify({"all_products": [product.json() for product in all_products]})
 
-def update_product_status_after_seller_confirms_offer(productID):
+@app.route("/update_product_status/<string:bidID>", methods=["GET"])
+def update_product_status(productID):
     # change product status to pending
-    # change failed bid status from pending to failed
     # change successful bid status from pending to accepted, pending paynent, create new entry for transaction db
     # once transaction completed, change bid to successful and product status to closed
 
@@ -63,7 +65,30 @@ def update_product_status_after_seller_confirms_offer(productID):
     
     return 
 
+@app.route("/get_product_info/<string:productID>", methods=["GET"])
+def get_product_info_by_productID(productID):
+    product = Product.query.filter_by(productID=productID).first()
+    if product:
+        return jsonify({"product": [product.json() ]})
+    return jsonify({"message": "product not found" })
 
+
+
+
+@app.route("/update_product_status/<string:bidID>", methods=["POST"])
+def post_new_product():
+    if request.method == 'POST':
+        productName = request.form['productName']
+        productType = request.form['productType']
+        productDesc = request.form['productDesc']
+        productStatus = request.form['productStatus']
+        meetup = meetup
+
+        add_product = Product(str(uuid.uuid4())[:10], sellerID, productName, productType, productDes, productStatus, meetup)
+        db.session.add(add_product)
+        db.session.commit()
+        # redirect to product page with status change
+        return "product added"
 
 
 if __name__ == '__main__':
