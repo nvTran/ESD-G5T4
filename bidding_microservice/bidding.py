@@ -61,10 +61,9 @@ def place_bids(productID):
 
         gmaps = googlemaps.Client(key='AIzaSyDgHcefqn02VGMnzpAX3jBXoAoWvuLF3c0')
         longitude = request.form['longitude']
-        print(longitude)
         latitude = request.form['latitude']
-        reverse_geocode_result = gmaps.reverse_geocode((float(latitude),float(longitude)))
-
+        coords = str(latitude) + "," + str(longitude)
+        reverse_geocode_result = gmaps.reverse_geocode((float(latitude), float(longitude)))
 
         add_bid = ListBid(str(uuid.uuid4())[:10], productID, "123", "357", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, "pending", str(reverse_geocode_result))
         db.session.add(add_bid)
