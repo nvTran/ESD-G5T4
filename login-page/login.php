@@ -72,7 +72,7 @@ $g_client = new Google_Client();
 
 $g_client->setClientId("1038416313130-8kaejqp9740v9389dopqtrc3vqvks51c.apps.googleusercontent.com");
 $g_client->setClientSecret("tuTy7QTZ9f-Nfff1M_J47ddQ");
-$g_client->setRedirectUri("http://localhost/login-page/homepage.php");
+$g_client->setRedirectUri("http://localhost/google-api-php-client-master/homepage.php");
 $g_client->addScope("email");
 $g_client->addScope("profile");
 
