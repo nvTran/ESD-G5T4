@@ -56,16 +56,17 @@ def place_bids(productID):
     # authenticate first to get buyerID
 
     if request.method == 'POST':
+        print(request.form)
         bidAmt = request.form['bidAmt']
-        # meetup = request.form['meetup']
+        meetup = request.form['meetup']
 
         gmaps = googlemaps.Client(key='AIzaSyDgHcefqn02VGMnzpAX3jBXoAoWvuLF3c0')
-        longitude = request.form['longitude']
-        latitude = request.form['latitude']
-        coords = str(latitude) + "," + str(longitude)
-        reverse_geocode_result = gmaps.reverse_geocode((float(latitude), float(longitude)))
+        # longitude = request.form['longitude']
+        # latitude = request.form['latitude']
+        # coords = str(latitude) + "," + str(longitude)``
+        # reverse_geocode_result = gmaps.reverse_geocode((float(latitude), float(longitude)))
 
-        add_bid = ListBid(str(uuid.uuid4())[:10], productID, "123", "357", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, "pending", str(reverse_geocode_result))
+        add_bid = ListBid(str(uuid.uuid4())[:10], productID, "123", "357", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, "pending", str(meetup))
         db.session.add(add_bid)
         db.session.commit()
         # redirect to product page with status change
