@@ -84,7 +84,7 @@ def post_new_product():
         productType = request.form['productType']
         productDesc = request.form['productDesc']
         productStatus = request.form['productStatus']
-        meetup = meetup
+        meetup = request.form['meetup']
 
         add_product = Product(str(uuid.uuid4())[:10], sellerID, productName, productType, productDes, productStatus, meetup)
         db.session.add(add_product)
