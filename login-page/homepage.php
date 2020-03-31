@@ -15,7 +15,7 @@
         include("connection.php");                    
         $result = mysqli_query($mysqli, "SELECT * FROM login");
     ?>                
-        Welcome <?php echo $_SESSION['name'] ?> ! <a href='logout.php'>Logout</a><br/>
+        Welcome <?php echo $_SESSION['id']?> !  <a href='logout.php'>Logout</a><br/>
         <br/>
         <br/><br/>
     <?php    
