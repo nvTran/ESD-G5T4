@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import googlemaps
 from datetime import datetime
-
+import uuid
 
 
 model = None
@@ -77,16 +77,17 @@ def get_product_info_by_productID(productID):
 
 
 
-@app.route("/update_product_status/<string:bidID>", methods=["POST"])
-def post_new_product():
+@app.route("/post_new_product/<string:userID>", methods=["POST", "GET"])
+def post_new_product(userID):
+    if request.method== "GET":
+        return render_template("posting.html")
     if request.method == 'POST':
         productName = request.form['productName']
         productType = request.form['productType']
         productDesc = request.form['productDesc']
-        productStatus = request.form['productStatus']
         meetup = request.form['meetup']
 
-        add_product = Product(str(uuid.uuid4())[:10], sellerID, productName, productType, productDes, productStatus, meetup)
+        add_product = Product(str(uuid.uuid4())[:10], userID, productName, productType, productDesc, "newly listed", meetup)
         db.session.add(add_product)
         db.session.commit()
         # redirect to product page with status change
