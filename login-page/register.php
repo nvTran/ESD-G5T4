@@ -11,15 +11,14 @@
     if(isset($_POST['submit'])) {
         $name = $_POST['name'];
         $email = $_POST['email'];
-        $user = $_POST['username'];
         $pass = $_POST['password'];
  
-        if($user == "" || $pass == "" || $name == "" || $email == "") {
+        if( $pass == "" || $name == "" || $email == "") {
             echo "All fields should be filled. Either one or many fields are empty.";
             echo "<br/>";
             echo "<a href='register.php'>Go back</a>";
         } else {
-            mysqli_query($mysqli, "INSERT INTO login(name, email, username, password) VALUES('$name', '$email', '$user', md5('$pass'))")
+            mysqli_query($mysqli, "INSERT INTO login(name, email, password) VALUES('$name', '$email', md5('$pass'))")
             or die("Could not execute the insert query.");
             
             echo "Registration successfully";
@@ -39,10 +38,6 @@
                     <td>Email</td>
                     <td><input type="text" name="email"></td>
                 </tr>            
-                <tr> 
-                    <td>Username</td>
-                    <td><input type="text" name="username"></td>
-                </tr>
                 <tr> 
                     <td>Password</td>
                     <td><input type="password" name="password"></td>
