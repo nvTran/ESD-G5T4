@@ -50,6 +50,7 @@ def seller_view_bids(productID):
     all_bids = ListBid.query.filter_by(productID=productID).all()
     to_return = jsonify({"all_bids": [bid.json() for bid in all_bids]})
     return render_template("seller_view_bids.html", all_bids = to_return)
+    
 
 @app.route("/place_bid/<string:productID>", methods=['POST',"GET"])
 def place_bids(productID):
@@ -95,11 +96,15 @@ def change_bid_status_for_successful_bids(productID,bidID):
     return jsonify({"message": "couldnot find any bids for the productID specified"}), 200
 
 
-@app.route("/views_bid_and_status_by_userID/<string:buyerID>", methods=["GET"])
+@app.route("/views_bid_and_status_by_userID", methods=["GET"])
 def get_bids_and_status_by_buyerID(buyerID):
-    all_bids = ListBid.query.filter_by(buyerID=buyerID).first()
-    return jsonify({"all_bids": [bid.json() for bid in all_bids]}), 200
+    if request.method == "GET":
+        all_bids = ListBid.query.filter_by(buyerID=buyerID).first()
+        if all_bids:
+            return jsonify({"message": [bid.json() for bid in all_bids]})
+        else:
+            return jsonify({"message": "couldnot find any bids made by userID specified"})
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5004, debug=True)
