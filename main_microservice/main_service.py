@@ -47,7 +47,7 @@ def all_products():
 @app.route("/getProductByUserId/<string:userID>", methods=["GET"])
 def getProductByUserId(userID):
     url = "http://127.0.0.1:5001/getProductByUserId" + userID
-    all_products = request.get(url)
+    all_products = requests.get(url)
     all_products = all_products.json()
     if all_products['message'] == "successful":
         return render_template("products_by_user.html", all_products = all_products['products'])
@@ -73,7 +73,7 @@ def get_product_info_by_productID(productID):
 @app.route("/post_new_product", methods=["POST","GET"])
 def post_new_product():
     if request.method == "GET":
-        return render_template("posting.html")
+        return render_template("posting.html", userID = userID)
     if request.method == "POST":
         productName = request.form['productName']
         productType = request.form['productType']

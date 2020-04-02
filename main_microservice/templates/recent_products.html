@@ -20,9 +20,15 @@ crossorigin="anonymous">
     
 </script>
 </head>
+<body>
     <h1>Product information</h1>
     <h2>{{ all_products }} </h2>
+    <div id="print"></div>
 
+    <script type="text/javascript">
+    	var product = JSON.parse('{{ all_products | tojson | safe}}');
+    	document.getElementById('print').innerHTML = product
+    </script>
 
 
     

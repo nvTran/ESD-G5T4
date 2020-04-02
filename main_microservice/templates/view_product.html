@@ -118,9 +118,8 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript">
   	let allItems;
-  	var product = JSON.parse('{{ user | tojson | safe}}');
-	    document.getElementById('userID').innerHTML=user.user;
-  	for (var i = 0; i < 5; i++) {
+  	var product = JSON.parse('{{ recent_products | tojson | safe}}');
+  	for (var i = 0; i < product.all_products.length ; i++) {
   		let item =
   			"<div class='col-lg-4 col-md-6 mb-4'>" +
 	            "<div class='card h-100'>" +
@@ -129,7 +128,7 @@
 	              "</a>" +
 	              "<div class='card-body'>" +
 	                "<h4 class='card-title'>" +
-	                  "<a href='#'>Item One" + 
+	                  "<a href='#' class='prodName'>Item One" + 
 	                  "</a>" +
 	                "</h4>" +
 	                "<h5>$24.99</h5>" +
@@ -142,13 +141,9 @@
           	"</div>";
         allItems += item;
   		$(".item-list").append(item);
+	     
   	}
   </script>
-  <script>
-	    var user = JSON.parse('{{ user | tojson | safe}}');
-	    document.getElementById('userID').innerHTML=user.user;
-
-	</script>
 
 </body>
 
