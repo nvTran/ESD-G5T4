@@ -63,7 +63,7 @@ def update_product_status():
     # change successful bid status from pending to accepted, pending paynent, create new entry for transaction db
     # once transaction completed, change bid to successful and product status to closed
     if request.method == 'POST':
-        content = request.json()
+        content = request.json
         productID = content['productID']
 
     product_queried = Product.query.filter_by(productID =productID).first()
@@ -71,14 +71,15 @@ def update_product_status():
     db.session.commit()
 
     
-    return 
+    return jsonify({"message": "updated"})
 
 @app.route("/get_product_info/<string:productID>", methods=["GET"])
 def get_product_info_by_productID(productID):
-    product = Product.query.filter_by(productID=productID).first()
-    if product:
-        return jsonify({"message": [product.json() ]})
-    return jsonify({"message": "product not found" })
+    if request.method == 'GET':        
+        product = Product.query.filter_by(productID=productID).first()
+        if product:
+            return jsonify({"message": [product.json() ]})
+        return jsonify({"message": "product not found" })
 
 
 

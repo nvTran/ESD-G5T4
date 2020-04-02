@@ -13,11 +13,11 @@ model = None
 app = Flask(__name__)
 CORS(app)
 
-userID = null
+userID = 
 @app.route("/authenticate", methods =["POST"])
 def authenticate():
     if request.method == "POST":
-        content = request.json()
+        content = request.json
         userID = content['id']
         username = content['username']
         return "authenticated"
@@ -26,7 +26,7 @@ def authenticate():
 
 
 # Home page that view links to all the functions and 
-@app.route("/homepage", methods =["GET","POST")
+@app.route("/homepage", methods =["GET","POST"])
 def homepage():
     if request.method == "GET":
 
