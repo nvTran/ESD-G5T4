@@ -26,7 +26,7 @@ def authenticate():
 
 
 # Home page that view links to all the functions and 
-@app.route("/homepage", methods =["GET","POST")
+@app.route("/homepage", methods =["GET","POST"])
 def homepage():
     if request.method == "GET":
 
