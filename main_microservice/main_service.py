@@ -126,7 +126,6 @@ def get_bids_and_status_by_buyerID():
     all_bids = requests.get(url)
 
     all_bids = all_bids.json()
-    print(all_bids)
     if all_bids['message'] == "successful":
         return render_template("bid_status.html", all_bids=all_bids)
     
