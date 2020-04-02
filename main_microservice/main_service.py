@@ -114,7 +114,7 @@ def place_bids(productID):
         print(request.form)
         bidAmt = request.form['bidAmt']
         meetup = request.form['meetup']
-        place_a_bid = requests.post('http://127.0.0.1:5001/place_bid/', json={"userID":userID, "productName": productName, "productType":productType, "productDesc": productDesc, "meetup":meetup})
+        place_a_bid = requests.post('http://127.0.0.1:5004/place_bid/', json={"userID":userID, "bidAmt": bidAmt , "meetup":meetup})
         response = place_a_bid.json()
         if response['message'] == "successful":
             return "successfully placed a bid"
@@ -122,14 +122,23 @@ def place_bids(productID):
 # View all bids placed by user
 @app.route("/views_bid_and_status_by_userID", methods=["GET"])
 def get_bids_and_status_by_buyerID():
-    url = "http://127.0.0.1:5001/views_bid_and_status_by_userID/" + userID
+    url = "http://127.0.0.1:5004/views_bid_and_status_by_userID/" + userID
     all_bids = requests.get(str(url))
-
     response = all_bids.json()
     print(response)
     # {"productID": self.productID, "sellerID": self.userID, "productName": self.productName, "productType": self.productType,"productDesc": self.productDesc, "productStatus": self.productStatus, "meetup": self.meetup }
     return render_template("bid_status.html", all_bids=response)
     
+
+@app.route("/transfer", methods=["GET"])
+def transfer(bidID, bidAmt, productName):
+    url = "http://127.0.0.1:5005/paypal_payment"
+    transfer_request = requests.post(url, json={"bidID": bidID, })
+    response = transfer_request.json()
+    return response
+
+
+
 
 if __name__ == '__main__':
     app.run(port=5002, debug=True)
