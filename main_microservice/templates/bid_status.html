@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>View offers</title>
+	<title>Bids offered by you</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
@@ -56,6 +56,9 @@
 		.list-group{
 			margin-top: 1.5em;
 		}
+		.table{
+			margin-top: 5em;
+		}
 	</style>
 </head>
 <body>
@@ -86,35 +89,44 @@
 	</nav>
 	<div class="container">
 		<table class="table">
-		  <thead>
-		    <tr>
-		      <th scope="col">#</th>
-		      <th scope="col">First</th>
-		      <th scope="col">Last</th>
-		      <th scope="col">Handle</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		    <tr>
-		      <th scope="row">1</th>
-		      <td>Mark</td>
-		      <td>Otto</td>
-		      <td>@mdo</td>
-		    </tr>
-		    <tr>
-		      <th scope="row">2</th>
-		      <td>Jacob</td>
-		      <td>Thornton</td>
-		      <td>@fat</td>
-		    </tr>
-		    <tr>
-		      <th scope="row">3</th>
-		      <td>Larry</td>
-		      <td>the Bird</td>
-		      <td>@twitter</td>
-		    </tr>
-		  </tbody>
+			<thead>
+				<tr>
+					<th scope="col">Bid ID</th>
+					<th scope="col">Seller ID</th>
+					<th scope="col">Bid Date Time</th>
+					<th scope="col">Bid Amount</th>
+					<th scope="col">Bid Status</th>
+					<th scope="col">Meet-up location</th>
+				</tr>
+			</thead>
+			<tbody class="item-list">
+			</tbody>
 		</table>
 	</div>
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">G5T4 ESD Project</p>
+		</div>
+		<!-- /.container -->
+	</footer>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		let allItems;
+		var bids = JSON.parse('{{ all_bids | tojson | safe}}');
+		for (obj of bids.all_bids) {
+			let item =
+			"<tr>" +
+				"<th scope='row'>"+obj.bidID+"</th>" +
+				"<td>"+obj.sellerID+"</td>" +
+				"<td>"+obj.bidDateTime+"</td>" +
+				"<td>"+obj.bidAmt+"</td>" +
+				"<td>"+obj.bidStatus+"</td>" +
+				"<td>"+obj.meetup+"</td>" +
+			"</tr>";
+			allItems += item;
+			$(".item-list").append(item);
+
+		}
+	</script>
 </body>
 </html>
