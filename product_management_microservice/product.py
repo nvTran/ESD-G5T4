@@ -55,7 +55,7 @@ def recent_products():
 def getProductByUserId(userID):
     # authenticate first
     all_products = Product.query.filter_by(userID=userID).all()
-    return jsonify({"all_products": [product.json() for product in all_products]})
+    return jsonify({"message": "successful", "all_products": [product.json() for product in all_products]})
 
 @app.route("/update_product_status", methods=["GET","POST"])
 def update_product_status():

@@ -13,7 +13,7 @@ model = None
 app = Flask(__name__)
 CORS(app)
 
-userID = 
+userID = "christine"
 @app.route("/authenticate", methods =["POST"])
 def authenticate():
     if request.method == "POST":
@@ -46,11 +46,11 @@ def all_products():
 # View all products listed by a user
 @app.route("/getProductByUserId/<string:userID>", methods=["GET"])
 def getProductByUserId(userID):
-    url = "http://127.0.0.1:5001/getProductByUserId" + userID
+    url = "http://127.0.0.1:5001/getProductByUserId/" + userID
     all_products = requests.get(url)
     all_products = all_products.json()
     if all_products['message'] == "successful":
-        return render_template("products_by_user.html", all_products = all_products['products'])
+        return render_template("products_by_user.html", all_products = all_products)
 
 
 
