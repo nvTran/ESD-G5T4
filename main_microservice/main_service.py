@@ -35,7 +35,7 @@ def all_products():
 @app.route("/getProductByUserId/<string:userID>", methods=["GET"])
 def getProductByUserId(userID):
     url = "http://127.0.0.1:5001/getProductByUserId" + userID
-    all_products = request.get("url")
+    all_products = request.get(url)
     all_products = all_products.json()
     if all_products['message'] == "successful":
         return render_template("products_by_user.html", all_products = all_products['products'])
@@ -74,13 +74,24 @@ def post_new_product():
 
 
 #View all offers for your products
-@app.route("/view_offers/<string:sellerID>", methods=['POST',"GET"])
-def seller_view_bids(productID):
-    offers = requests.get('http://127.0.0.1:5004/seller_view_bids/')
-#     all_bids = ListBid.query.filter_by(productID=productID).all()
-#     to_return = jsonify({"all_bids": [bid.json() for bid in all_bids]})
-#     return render_template("seller_view_bids.html", all_bids = to_return)
-
+@app.route("/view_offers/<string:productID>", methods=['POST',"GET"])
+def seller_view_offers(productID):
+    if request.method == "GET":
+        url = 'http://127.0.0.1:5004/seller_view_bids/' + productID
+        offers = requests.get(url)
+        offers = offers.json()
+        return render_template("view_offers.html", offers = offers)
+    if request.method == "POST":
+        # Update bid status
+        bidID_selected = request.form['bidID']
+        url = "http://127.0.0.1:5004/chang_bid_status/" + productID + bidID_selected
+        register_selected_bid = request.post(url)
+        change_bid_status = register_selected_bid.json()
+        # Update product status
+        url2 = "http://127.0.0.1:5001/update_product_status"
+        update_product = requests.post(url2, json={"productID": productID})
+        update_product = update_product.json()
+        return change_bid_status['message'], update['message']
 
 #Place a bid for a product
 @app.route("/place_bid/<string:productID>", methods=['POST',"GET"])
@@ -91,8 +102,8 @@ def place_bids(productID):
         print(request.form)
         bidAmt = request.form['bidAmt']
         meetup = request.form['meetup']
-        place_a_bid = requests.post('http://127.0.0.1:5001/post_new_product', json={"userID":userID, "productName": productName, "productType":productType, "productDesc": productDesc, "meetup":meetup})
-        response = post_new_product_request.json()
+        place_a_bid = requests.post('http://127.0.0.1:5001/place_bid/', json={"userID":userID, "productName": productName, "productType":productType, "productDesc": productDesc, "meetup":meetup})
+        response = place_a_bid.json()
         if response['message'] == "successful":
             return "successfully placed a bid"
 

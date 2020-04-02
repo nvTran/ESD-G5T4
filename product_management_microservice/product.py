@@ -47,9 +47,9 @@ def recent_products():
     all_products = Product.query.limit(20).all()
     return jsonify({"all_products": [product.json() for product in all_products]}) 
 
-@app.route("/all_product/<string:userID>")
-def all_products(userID):
-    return render_template("all_products.html", userID = userID)
+# @app.route("/all_product/<string:userID>")
+# def all_products(userID):
+#     return render_template("all_products.html", userID = userID)
 
 @app.route("/getProductByUserId/<string:userID>", methods=["GET"])
 def getProductByUserId(userID):
@@ -67,7 +67,7 @@ def update_product_status():
         productID = content['productID']
 
     product_queried = Product.query.filter_by(productID =productID).first()
-    product_queried.productStatus = 'pending'
+    product_queried.productStatus = 'closed'
     db.session.commit()
 
     

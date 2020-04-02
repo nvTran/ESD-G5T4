@@ -44,16 +44,17 @@ def say_hello():
     return "This is bidding microservice"
 
 
-@app.route("/seller_view_bids/<string:sellerID>", methods=['POST',"GET"])
-def seller_view_bids(productID):
+@app.route("/seller_view_bids/<string:productID>", methods=['POST',"GET"])
+def seller_view_offers(productID):
     # authenticate first
-    all_bids = ListBid.query.filter_by(productID=productID).all()
-    to_return = jsonify({"all_bids": [bid.json() for bid in all_bids]})
-    return render_template("seller_view_bids.html", all_bids = to_return)
+    if request.method == "GET":
+        all_bids = ListBid.query.filter_by(productID=productID).all()
+        return jsonify({"all_bids": [bid.json() for bid in all_bids]})
     
 
-@app.route("/place_bid/<string:productID>", methods=['POST',"GET"])
-def place_bids(productID):
+
+@app.route("/place_bid/", methods=['POST',"GET"])
+def place_bids():
     # authenticate first to get buyerID
 
     if request.method == 'POST':
@@ -71,7 +72,7 @@ def place_bids(productID):
         db.session.add(add_bid)
         db.session.commit()
         # redirect to product page with status change
-        return "bid_placed"
+        return jsonify({"message":"successful"}),200
 
     if request.method == 'GET':
         # view the page to place bid 
@@ -82,7 +83,7 @@ def place_bids(productID):
 
     return render_template("place_bid.html")
  
-@app.route("/place_bid/<string:productID>", methods=["GET"])
+@app.route("/chang_bid_status/<string:productID>/<string:bidID>", methods=["GET"])
 def change_bid_status_for_successful_bids(productID,bidID):
     all_bids = ListBid.query.filter_by(productID=productID).all()
     if all_bids: 
@@ -96,7 +97,7 @@ def change_bid_status_for_successful_bids(productID,bidID):
     return jsonify({"message": "couldnot find any bids for the productID specified"}), 200
 
 
-@app.route("/views_bid_and_status_by_userID", methods=["GET"])
+@app.route("/views_bid_and_status_by_userID/<string:userID>", methods=["GET"])
 def get_bids_and_status_by_buyerID(buyerID):
     if request.method == "GET":
         all_bids = ListBid.query.filter_by(buyerID=buyerID).first()
