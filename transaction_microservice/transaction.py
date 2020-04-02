@@ -15,30 +15,30 @@ db = SQLAlchemy(app)
 
 
 
-class ListBid(db.Model):
-    __tablename__ = 'bidItem'
-    bidID = db.Column(db.String(10), primary_key=True)
-    productID = db.Column(db.String(100), nullable=False)
-    sellerID = db.Column(db.String(10), nullable=False)
-    bidDateTime = db.Column(db.String(20), nullable=False)
-    buyerID = db.Column(db.String(10), nullable=False)
-    bidAmt = db.Column(db.Float(), nullable=False)
-    bidStatus = db.Column(db.String(20), nullable=False)
-    meetup = db.Column(db.String(100), nullable=False)
+# class ListBid(db.Model):
+#     __tablename__ = 'bidItem'
+#     bidID = db.Column(db.String(10), primary_key=True)
+#     productID = db.Column(db.String(100), nullable=False)
+#     sellerID = db.Column(db.String(10), nullable=False)
+#     bidDateTime = db.Column(db.String(20), nullable=False)
+#     buyerID = db.Column(db.String(10), nullable=False)
+#     bidAmt = db.Column(db.Float(), nullable=False)
+#     bidStatus = db.Column(db.String(20), nullable=False)
+#     meetup = db.Column(db.String(100), nullable=False)
 
  
-    def __init__(self, bidID, productID, sellerID, buyerID, bidDateTime, bidAmt, bidStatus, meetup):
-        self.bidID = bidID
-        self.productID = productID
-        self.sellerID = sellerID
-        self.bidDateTime = bidDateTime
-        self.buyerID = buyerID
-        self.bidAmt = bidAmt
-        self.bidStatus = bidStatus
-        self.meetup = meetup
+#     def __init__(self, bidID, productID, sellerID, buyerID, bidDateTime, bidAmt, bidStatus, meetup):
+#         self.bidID = bidID
+#         self.productID = productID
+#         self.sellerID = sellerID
+#         self.bidDateTime = bidDateTime
+#         self.buyerID = buyerID
+#         self.bidAmt = bidAmt
+#         self.bidStatus = bidStatus
+#         self.meetup = meetup
 
-    def json(self):
-        return {"bidID": self.bidID, "productID": self.productID, "sellerID": self.sellerID, "bidDateTime": self.bidDateTime, "buyerID": self.buyerID, "bidAmt": self.bidAmt, "bidStatus": self.bidStatus, "meetup": self.bidStatus }
+#     def json(self):
+#         return {"bidID": self.bidID, "productID": self.productID, "sellerID": self.sellerID, "bidDateTime": self.bidDateTime, "buyerID": self.buyerID, "bidAmt": self.bidAmt, "bidStatus": self.bidStatus, "meetup": self.bidStatus }
 
 
 
@@ -77,8 +77,12 @@ def paypal_Return():
 
 @app.route('/paypal_payment', methods=['GET', 'POST'])
 def paypal_payment():
-    bidID = '0001'
-    bid = ListBid.query.filter_by(bidID = bidID).first()
+    if request.method == 'POST':
+        content = request.json
+        productName = content['productName']
+        bidID = content['bidID']
+        bidAmt = content['bidAmt']
+    
     # Payment
     # A Payment Resource; create one using
     # the above types and intent as 'sale'
@@ -105,13 +109,13 @@ def paypal_payment():
             # ItemList
             "item_list": {
                 "items": [{
-                    "name": bid.productID,
-                    "sku": bid.bidID,
-                    "price": str(bid.bidAmt),
+                    "name": productName,
+                    "sku": bidID,
+                    "price": str(bidAmt),
                     "currency": "USD",
                     "quantity": 1}]},
             "amount": {
-                "total": str(bid.bidAmt * 1),
+                "total": str(bidAmt * 1),
                 "currency": "USD"},
             "description": "test 123 This is the payment transaction description."}]})
 

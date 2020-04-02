@@ -58,7 +58,6 @@ def place_bids():
     # authenticate first to get buyerID
 
     if request.method == 'POST':
-        print(request.form)
         bidAmt = request.form['bidAmt']
         meetup = request.form['meetup']
 

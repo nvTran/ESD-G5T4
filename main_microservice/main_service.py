@@ -130,5 +130,15 @@ def get_bids_and_status_by_buyerID():
         return render_template("bid_status.html", all_bids=all_bids)
     
 
+@app.route("/transfer", methods=["GET"])
+def transfer(bidID, bidAmt, productName):
+    url = "http://127.0.0.1:5005/paypal_payment"
+    transfer_request = requests.post(url, json={"bidID": bidID,"bidAmt": bidAmt,"productName": productName})
+    response = transfer_request.json()
+    return response
+
+
+
+
 if __name__ == '__main__':
     app.run(port=5002, debug=True)
