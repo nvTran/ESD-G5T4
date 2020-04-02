@@ -75,7 +75,7 @@ def place_bids():
 
     if request.method == 'GET':
         # view the page to place bid 
-        to_return = ListBid.query.filter_by(productID=productID).first()
+        to_return = ListBid.query.filter_by(productID=productID).all()
         return render_template("place_bid.html", product_info = to_return)
          
 
@@ -99,7 +99,7 @@ def change_bid_status_for_successful_bids(productID,bidID):
 @app.route("/views_bid_and_status_by_userID/<string:buyerID>", methods=["GET"])
 def get_bids_and_status_by_buyerID(buyerID):
     if request.method == "GET":
-        all_bids = ListBid.query.filter_by(buyerID=buyerID).first()
+        all_bids = ListBid.query.filter_by(buyerID=buyerID).all()
         if all_bids:
             return jsonify({"message": "successful", "all_bids": [bid.json() for bid in all_bids]})
         else:

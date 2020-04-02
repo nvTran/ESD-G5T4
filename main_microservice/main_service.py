@@ -132,8 +132,11 @@ def get_bids_and_status_by_buyerID():
     
 
 @app.route("/transfer", methods=["GET"])
-def transfer(bidID, bidAmt, productName):
+def transfer():
     url = "http://127.0.0.1:5005/paypal_payment"
+    bidID = "0001"
+    bidAmt = 3
+    productName = "Apple airpods"
     transfer_request = requests.post(url, json={"bidID": bidID,"bidAmt": bidAmt,"productName": productName})
     response = transfer_request.json()
     return response
