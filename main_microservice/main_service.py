@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask import Flask, request, render_template, flash, redirect, url_for
+from flask import Flask, request, render_template, flash, redirect, url_for, session
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import uuid
@@ -13,15 +13,27 @@ model = None
 app = Flask(__name__)
 CORS(app)
 
-userID = "christine" 
+userID = null
+@app.route("/authenticate", methods =["POST"])
+def authenticate():
+    if request.method == "POST":
+        content = request.json()
+        userID = content['id']
+        username = content['username']
+        return "authenticated"
+
+
+
 
 # Home page that view links to all the functions and 
-@app.route("/homepage")
+@app.route("/homepage", methods =["GET","POST")
 def homepage():
-    recent_products = requests.get("http://127.0.0.1:5001/recent_products")
-    recent_products = recent_products.json()
+    if request.method == "GET":
 
-    return render_template("homepage.html", userID = userID, recent_products = recent_products)
+        recent_products = requests.get("http://127.0.0.1:5001/recent_products")
+        recent_products = recent_products.json()
+
+        return render_template("homepage.html", userID = userID, recent_products = recent_products)
 
 
 # View all products on the platform
@@ -91,7 +103,7 @@ def seller_view_offers(productID):
         url2 = "http://127.0.0.1:5001/update_product_status"
         update_product = requests.post(url2, json={"productID": productID})
         update_product = update_product.json()
-        return change_bid_status['message'], update['message']
+        return change_bid_status['message'], update_product['message']
 
 #Place a bid for a product
 @app.route("/place_bid/<string:productID>", methods=['POST',"GET"])

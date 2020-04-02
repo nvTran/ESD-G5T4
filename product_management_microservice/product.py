@@ -63,7 +63,7 @@ def update_product_status():
     # change successful bid status from pending to accepted, pending paynent, create new entry for transaction db
     # once transaction completed, change bid to successful and product status to closed
     if request.method == 'POST':
-        content = request.json
+        content = request.json()
         productID = content['productID']
 
     product_queried = Product.query.filter_by(productID =productID).first()
