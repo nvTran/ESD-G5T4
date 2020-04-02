@@ -77,8 +77,9 @@ if(isset($pay_load)){
             'id' => $id,
             'name' => $name
         );
+        $data = json_encode($data);
         # Create a connection
-        $url = 'localhost:5002';
+        $url = 'localhost:5002/authenticate';
         $ch = curl_init($url);
         # Form data string
         $postString = http_build_query($data, '', '&');
@@ -99,8 +100,9 @@ if(isset($pay_load)){
             'id' => $id,
             'name' => $name
         );
+        $data = json_encode($data);
         # Create a connection
-        $url = 'localhost:5002';
+        $url = 'localhost:5002/authenticate';
         $ch = curl_init($url);
         # Form data string
         $postString = http_build_query($data, '', '&');
@@ -110,9 +112,6 @@ if(isset($pay_load)){
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         # Get the response
         $response = curl_exec($ch);
-
-   
-
 }}   
 // client ID is 1038416313130-8kaejqp9740v9389dopqtrc3vqvks51c.apps.googleusercontent.com
 // client secret is tuTy7QTZ9f-Nfff1M_J47ddQ
