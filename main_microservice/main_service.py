@@ -18,7 +18,7 @@ userID = "christine"
 # Home page that view links to all the functions and 
 @app.route("/homepage")
 def homepage():
-    recent_products = request.get("http://127.0.0.1:5001/recent_products")
+    recent_products = requests.get("http://127.0.0.1:5001/recent_products")
     recent_products = recent_products.json()
 
     return render_template("homepage.html", userID = userID, recent_products = recent_products)
