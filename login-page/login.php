@@ -66,20 +66,51 @@ if(isset($pay_load)){
         or die("Could not execute the select query.");
     
     $row = mysqli_fetch_assoc($result);
-    $_SESSION['id'] = $row['id'];
+    $id = $row['id'];
     
     if(is_array($row) && !empty($row)) {
         // user can login!! 
         echo "You have logged in!";
-        // header("Location: homepage.php");
+        
+        # Our new data
+        $data = array(
+            'id' => $id,
+            'name' => $name
+        );
+        # Create a connection
+        $url = 'localhost:5002';
+        $ch = curl_init($url);
+        # Form data string
+        $postString = http_build_query($data, '', '&');
+        # Setting our options
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        # Get the response
+        $response = curl_exec($ch);
+        curl_close($ch);        
         
     } else {
         // register user
         mysqli_query($mysqli, "INSERT INTO login(name, email, password) VALUES('$name', '$email', NULL)")
             or die("Could not execute the insert query.");
         echo "You have been registered in!";
+        $data = array(
+            'id' => $id,
+            'name' => $name
+        );
+        # Create a connection
+        $url = 'localhost:5002';
+        $ch = curl_init($url);
+        # Form data string
+        $postString = http_build_query($data, '', '&');
+        # Setting our options
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        # Get the response
+        $response = curl_exec($ch);
 
-        // header("Location: homepage.php");
    
 
 }}   
