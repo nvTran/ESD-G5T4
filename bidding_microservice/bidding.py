@@ -96,12 +96,12 @@ def change_bid_status_for_successful_bids(productID,bidID):
     return jsonify({"message": "couldnot find any bids for the productID specified"}), 200
 
 
-@app.route("/views_bid_and_status_by_userID/<string:userID>", methods=["GET"])
+@app.route("/views_bid_and_status_by_userID/<string:buyerID>", methods=["GET"])
 def get_bids_and_status_by_buyerID(buyerID):
     if request.method == "GET":
         all_bids = ListBid.query.filter_by(buyerID=buyerID).first()
         if all_bids:
-            return jsonify({"message": [bid.json() for bid in all_bids]})
+            return jsonify({"message": "successful", "all_bids": [bid.json() for bid in all_bids]})
         else:
             return jsonify({"message": "couldnot find any bids made by userID specified"})
 

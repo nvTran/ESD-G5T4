@@ -13,7 +13,7 @@ model = None
 app = Flask(__name__)
 CORS(app)
 
-userID = "christine"
+userID = "357"
 @app.route("/authenticate", methods =["POST"])
 def authenticate():
     if request.method == "POST":
@@ -50,7 +50,7 @@ def getProductByUserId(userID):
     all_products = requests.get(url)
     all_products = all_products.json()
     if all_products['message'] == "successful":
-        return render_template("products_by_user.html", all_products = all_products)
+        return render_template("products_by_user.html", all_products = all_products, userID = userID)
 
 
 
@@ -100,7 +100,7 @@ def seller_view_offers(productID):
         register_selected_bid = request.post(url)
         change_bid_status = register_selected_bid.json()
         # Update product status
-        url2 = "http://127.0.0.1:5001/update_product_status"
+        url2 = "http://127.0.0.1:5004/update_product_status"
         update_product = requests.post(url2, json={"productID": productID})
         update_product = update_product.json()
         return change_bid_status['message'], update_product['message']
@@ -114,7 +114,7 @@ def place_bids(productID):
         print(request.form)
         bidAmt = request.form['bidAmt']
         meetup = request.form['meetup']
-        place_a_bid = requests.post('http://127.0.0.1:5004/place_bid/', json={"userID":userID, "bidAmt": bidAmt , "meetup":meetup})
+        place_a_bid = requests.post('http://127.0.0.1:5004/place_bid/', json={"userID":userID, "productName": productName, "productType":productType, "productDesc": productDesc, "meetup":meetup})
         response = place_a_bid.json()
         if response['message'] == "successful":
             return "successfully placed a bid"
@@ -123,17 +123,18 @@ def place_bids(productID):
 @app.route("/views_bid_and_status_by_userID", methods=["GET"])
 def get_bids_and_status_by_buyerID():
     url = "http://127.0.0.1:5004/views_bid_and_status_by_userID/" + userID
-    all_bids = requests.get(str(url))
-    response = all_bids.json()
-    print(response)
-    # {"productID": self.productID, "sellerID": self.userID, "productName": self.productName, "productType": self.productType,"productDesc": self.productDesc, "productStatus": self.productStatus, "meetup": self.meetup }
-    return render_template("bid_status.html", all_bids=response)
+    all_bids = requests.get(url)
+
+    all_bids = all_bids.json()
+    print(all_bids)
+    if all_bids['message'] == "successful":
+        return render_template("bid_status.html", all_bids=all_bids)
     
 
 @app.route("/transfer", methods=["GET"])
 def transfer(bidID, bidAmt, productName):
     url = "http://127.0.0.1:5005/paypal_payment"
-    transfer_request = requests.post(url, json={"bidID": bidID, })
+    transfer_request = requests.post(url, json={"bidID": bidID,"bidAmt": bidAmt,"productName": productName})
     response = transfer_request.json()
     return response
 
