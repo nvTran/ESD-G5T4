@@ -10,10 +10,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `Product`
+-- Database: `transaction`
 --
-CREATE DATABASE IF NOT EXISTS `product` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `product`;
+CREATE DATABASE IF NOT EXISTS `` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `transaction`;
 
 -- --------------------------------------------------------
 
@@ -21,8 +21,8 @@ USE `product`;
 -- Table structure for table `products`
 --
 
-DROP TABLE IF EXISTS `product`;
-CREATE TABLE IF NOT EXISTS `product` (
+DROP TABLE IF EXISTS `transaction`;
+CREATE TABLE IF NOT EXISTS `transaction` (
   `productID` char(13) NOT NULL,
   `bidID` char(13) NOT NULL,
   `Currency` varchar(64) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`productID`, `bidID`, `Currency`, `bidAmt`, `Quantity`) VALUES
+INSERT INTO `transaction` (`productID`, `bidID`, `Currency`, `bidAmt`, `Quantity`) VALUES
 ('0001', '0001', '10', 2),
 ('0002', '0002', '12', 1),
 ('0003', '0003', '14', 3),

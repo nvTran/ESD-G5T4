@@ -1,3 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head >
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Login</title>
+  </head>
+  <body class="mx-auto" style="width: 200px;">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 <?php require ("./vendor/autoload.php");
 require ('connection.php');
@@ -14,9 +32,7 @@ $g_client->setApprovalPrompt('force');
 
 //Step 2 : Create the url
 $auth_url = $g_client->createAuthUrl();
-echo "<a href='$auth_url'>Login Through Google </a>";
 echo "<br>";
-echo "<a href='./register.php'>Sign Up </a>";
 
 //Step 3 : Get the authorization  code
 $code = isset($_GET['code']) ? $_GET['code'] : NULL;
@@ -29,28 +45,6 @@ if(isset($code)) {
     }catch (Exception $e){
         echo $e->getMessage();
     }
-//     if ($g_client->getAccessToken()){
-        
-//       //Get user details if user is logged in
-//       $user                 = $google_oauthV2->userinfo->get();
-//       $user_id              = $user['id'];
-//       $user_name            = filter_var($user['name'], FILTER_SANITIZE_SPECIAL_CHARS);
-//       $email                = filter_var($user['email'], FILTER_SANITIZE_EMAIL);
-//       $_SESSION['email'] = $email;
-//       $profile_url          = filter_var($user['link'], FILTER_VALIDATE_URL);
-//       $profile_image_url    = filter_var($user['picture'], FILTER_VALIDATE_URL);
-//       $personMarkup         = "$email<div><img src='$profile_image_url?sz=50'></div>";
-//       $_SESSION['token']    = $gClient->getAccessToken();
-// }
-// else 
-// {
-//     //get google login url
-//     $authUrl = $g_client->createAuthUrl();
-// }
-
-
-
-
     try {
         $pay_load = $g_client->verifyIdToken();
         echo $pay_load['email'];
@@ -64,7 +58,6 @@ if(isset($code)) {
 } else{
     $pay_load = null;
 }
-
 if(isset($pay_load)){
     $name = $pay_load['name'];
     $email = $pay_load['email'];
@@ -73,36 +66,62 @@ if(isset($pay_load)){
         or die("Could not execute the select query.");
     
     $row = mysqli_fetch_assoc($result);
-    $_SESSION['id'] = $row['id'];
-
+    $id = $row['id'];
+    
     if(is_array($row) && !empty($row)) {
         // user can login!! 
-        header("Location: homepage.php");
+        echo "You have logged in!";
+        
+        # Our new data
+        $data = array(
+            'id' => $id,
+            'name' => $name
+        );
+        # Create a connection
+        $url = 'localhost:5002';
+        $ch = curl_init($url);
+        # Form data string
+        $postString = http_build_query($data, '', '&');
+        # Setting our options
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        # Get the response
+        $response = curl_exec($ch);
+        curl_close($ch);        
         
     } else {
         // register user
         mysqli_query($mysqli, "INSERT INTO login(name, email, password) VALUES('$name', '$email', NULL)")
             or die("Could not execute the insert query.");
-        header("Location: homepage.php");
+        echo "You have been registered in!";
+        $data = array(
+            'id' => $id,
+            'name' => $name
+        );
+        # Create a connection
+        $url = 'localhost:5002';
+        $ch = curl_init($url);
+        # Form data string
+        $postString = http_build_query($data, '', '&');
+        # Setting our options
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        # Get the response
+        $response = curl_exec($ch);
+
    
 
-}
-
+}}   
 // client ID is 1038416313130-8kaejqp9740v9389dopqtrc3vqvks51c.apps.googleusercontent.com
 // client secret is tuTy7QTZ9f-Nfff1M_J47ddQ
 
 
- session_start(); ?>
-<html>
-<head>
-    <title>Login</title>
-</head>
- 
-<body>
-<a href="index.php">Home</a> <br />
-<?php
-include("connection.php");
- 
+ session_start();
+  ?>
+ <?php
+// include("connection.php");
 if(isset($_POST['submit'])) {
     $user = mysqli_real_escape_string($mysqli, $_POST['username']);
     $pass = mysqli_real_escape_string($mysqli, $_POST['password']);
@@ -132,7 +151,8 @@ if(isset($_POST['submit'])) {
             header('Location: homepage.php');            
         }
     }
-} else {
+} 
+else {
 ?>
     <p><font size="+2">Login</font></p>
     <form name="form1" method="post" action="">
@@ -147,12 +167,16 @@ if(isset($_POST['submit'])) {
             </tr>
             <tr> 
                 <td>&nbsp;</td>
-                <td><input type="submit" name="submit" value="Submit"></td>
+                <td><input class="btn btn-outline-primary" type="submit" name="submit" value="Submit"></td>
             </tr>
         </table>
     </form>
-<?php
-}}
+    <?php
+    echo "<a href='$auth_url'>Login Through Google </a>";
+    echo "<br>";
+    echo "<a href='./register.php'>Sign Up </a>";
+
+}
 ?>
 </body>
 </html>

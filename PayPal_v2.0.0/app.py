@@ -5,13 +5,13 @@ import paypalrestsdk
 
 app = Flask(__name__)
 #Make sure to change the connection accordingly
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:8889/product'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/transaction'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
  
 db = SQLAlchemy(app)
  
-class Product(db.Model):
-    __tablename__ = 'product'
+class transaction(db.Model):
+    __tablename__ = 'transaction'
  
     bidID = db.Column(db.String(13), primary_key=True)
     productID = db.Column(db.String(13), nullable=False)
@@ -36,7 +36,7 @@ paypalrestsdk.configure({
   "client_secret": "EFPgiR2Ku0gSyOgjc7hkkxfTAc2R4mPFWKUPy_RxFgxWR-h6ko6uZLjtFNgVd_ZLAHP8dHy6TkmGE92B" })
 
 @app.route('/', methods=['POST','GET'])
-def index(bidID):
+def index():
     
     if request.method == "GET":
         return render_template('index.html')
@@ -47,8 +47,8 @@ def index(bidID):
 @app.route('/payment/<string:bidID>', methods=['POST', 'GET'])
 def payment(bidID):
 
-    bid = Product.query.filter_by(bidID=bidID).first()
-
+    bid = transaction.query.filter_by(bidID=bidID).first()
+    print(bid)
     payment = paypalrestsdk.Payment({
         "intent": "sale",
         "payer": {
