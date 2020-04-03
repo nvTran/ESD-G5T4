@@ -60,6 +60,10 @@
     .list-group{
       margin-top: 1.5em;
     }
+    #placebid{
+      text-decoration: non;
+      color: white;
+    }
   </style>
 
 </head>
@@ -69,7 +73,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#">ESELL</a>
+      <a class="navbar-brand" href="/homepage">ESELL</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -80,8 +84,9 @@
         </div>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Welcome userID
+            <a class="nav-link" href="#">Welcome {{userID}}
               <span class="sr-only">(current)</span>
+            }
             </a>
           </li>
           <li class="nav-item">
@@ -94,7 +99,6 @@
 
   <!-- Page Content -->
   <div class="container">
-    <h1>{{product_info}}</h1>
     <div class="row">
 
       <div class="col-lg-3 side-bar-left">
@@ -105,20 +109,10 @@
         </div>
       </div>
       <!-- /.col-lg-3 -->
-
       <div class="col-lg-9 side-bar-right">
 
-        <div class="card mt-4">
-          <img class="card-img-top img-fluid" src="http://placehold.it/900x400" alt="">
-          <div class="card-body">
-            <h3 class="card-title">Product Name</h3>
-            <h4>$24.99</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
-            <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
-            4.0 stars
-            <br>
-            <button class="btn btn-danger bid-btn">Bid for product</button>
-          </div>
+        <div class="card mt-4 product-info">
+          
         </div>
         <!-- /.card -->
 
@@ -160,6 +154,23 @@
   <!-- Bootstrap core JavaScript -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript">
+    let allItems;
+    var product = JSON.parse('{{ product_info | tojson | safe}}');
+    for (obj of product.product) {
+      let item =
+        "<img class='card-img-top img-fluid' src='http://placehold.it/900x400' alt=''>" +
+          "<div class='card-body'>" +
+            "<h3 class='card-title'>"+ obj.productName+"</h3>" +
+            "<h5>"+ obj.meetup+"</h5>" + 
+            "<p class='card-text'>"+ obj.productDesc+"</p>" +
+            "<br>" + 
+            "<button class='btn btn-danger bid-btn'><a id='placebid' href='/place_bid/" + obj.sellerID+ "/"+obj.productID +"'>Bid for product</a></button>" +
+          "</div>";
+        allItems += item;
+      $(".mt-4").append(item);     
+    }
+  </script>
 
 </body>
 
