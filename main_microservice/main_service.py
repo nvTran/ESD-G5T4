@@ -107,15 +107,16 @@ def seller_view_offers(productID):
         return render_template("view_offers.html", offers = offers)
     if request.method == "POST":
         # Update bid status
-        bidID = request.form
+        bidID = request.form['bidID']
         url = "http://127.0.0.1:5004/change_bid_status/" + productID +"/"+ bidID
-        register_selected_bid = request.post(url)
+        register_selected_bid = requests.get(url)
         change_bid_status = register_selected_bid.json()
         # Update product status
-        url2 = "http://127.0.0.1:5004/update_product_status"
+        url2 = "http://127.0.0.1:5001/update_product_status"
         update_product = requests.post(url2, json={"productID": productID})
         update_product = update_product.json()
-        return change_bid_status['message'], update_product['message']
+        return render_template("blank2.html", message1 = change_bid_status['message'], message2=update_product['message'])
+        
 
 #Place a bid for a product
 @app.route("/place_bid/<string:sellerID>/<string:productID>", methods=['POST',"GET"])

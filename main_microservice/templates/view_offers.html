@@ -88,7 +88,7 @@
 			<thead>
 				<tr>
 					<th scope="col">Bid ID</th>
-					<th scope="col">Seller ID</th>
+					<th scope="col">Buyer ID</th>
 					<th scope="col">Bid Date Time</th>
 					<th scope="col">Bid Amount</th>
 					<th scope="col">Bid Status</th>
@@ -114,7 +114,7 @@
 				let item =
 				"<tr>" +
 					"<th scope='row'>"+obj.bidID+"</th>" +
-					"<td>"+obj.sellerID+"</td>" +
+					"<td>"+obj.buyerID+"</td>" +
 					"<td>"+obj.bidDateTime+"</td>" +
 					"<td>"+obj.bidAmt+"</td>" +
 					"<td>"+obj.bidStatus+"</td>" +
@@ -126,11 +126,16 @@
 				let item =
 				"<tr>" +
 					"<th scope='row'>"+obj.bidID+"</th>" +
-					"<td>"+obj.sellerID+"</td>" +
+					"<td>"+obj.buyerID+"</td>" +
 					"<td>"+obj.bidDateTime+"</td>" +
 					"<td>"+obj.bidAmt+"</td>" +
 					"<td>"+obj.bidStatus+"</td>" +
 					"<td>"+obj.meetup+"</td>" +
+					"<td>"+
+						"<form method='post'>" +
+							"<input type='hidden' name='bidID' value='" + obj.bidID + "'>" +
+							"<button type='submit'>Accept</button>"+
+						"</form>"
 					"<td>"+ "<a href='/view_offers/" + obj.productID +"/"+ obj.bidID  
        					+ "'>Accept</a></td>" +
 				"</tr>";
