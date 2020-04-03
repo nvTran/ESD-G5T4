@@ -37,7 +37,7 @@ class ListBid(db.Model):
         self.meetup = meetup
 
     def json(self):
-        return {"bidID": self.bidID, "productID": self.productID, "sellerID": self.sellerID, "bidDateTime": self.bidDateTime, "buyerID": self.buyerID, "bidAmt": self.bidAmt, "bidStatus": self.bidStatus, "meetup": self.bidStatus }
+        return {"bidID": self.bidID, "productID": self.productID, "sellerID": self.sellerID, "bidDateTime": self.bidDateTime, "buyerID": self.buyerID, "bidAmt": self.bidAmt, "bidStatus": self.bidStatus, "meetup": self.meetup }
 
 @app.route("/")
 def say_hello():
@@ -58,8 +58,12 @@ def place_bids():
     # authenticate first to get buyerID
 
     if request.method == 'POST':
-        bidAmt = request.form['bidAmt']
-        meetup = request.form['meetup']
+        content = request.json
+        bidAmt = content['bidAmt']
+        meetup = content['meetup']
+        productID = content['productID']
+        sellerID = content['sellerID']
+        buyerID = content['buyerID']
 
         gmaps = googlemaps.Client(key='AIzaSyDgHcefqn02VGMnzpAX3jBXoAoWvuLF3c0')
         # longitude = request.form['longitude']
@@ -67,20 +71,11 @@ def place_bids():
         # coords = str(latitude) + "," + str(longitude)``
         # reverse_geocode_result = gmaps.reverse_geocode((float(latitude), float(longitude)))
 
-        add_bid = ListBid(str(uuid.uuid4())[:10], productID, "123", "357", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, "pending", str(meetup))
+        add_bid = ListBid(str(uuid.uuid4())[:10], productID, sellerID, buyerID, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), bidAmt, "pending", str(meetup))
         db.session.add(add_bid)
         db.session.commit()
         # redirect to product page with status change
-        return jsonify({"message":"successful"}),200
-
-    if request.method == 'GET':
-        # view the page to place bid 
-        to_return = ListBid.query.filter_by(productID=productID).all()
-        return render_template("place_bid.html", product_info = to_return)
-         
-
-
-    return render_template("place_bid.html")
+        return jsonify({"message":"bid added successfully"})
  
 @app.route("/chang_bid_status/<string:productID>/<string:bidID>", methods=["GET"])
 def change_bid_status_for_successful_bids(productID,bidID):

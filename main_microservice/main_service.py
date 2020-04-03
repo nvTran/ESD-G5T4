@@ -34,6 +34,11 @@ def homepage():
         recent_products = recent_products.json()
 
         return render_template("homepage.html", userID = userID, recent_products = recent_products)
+    if request.method == "POST":
+        search_term = request.form['search_term']
+        search_products = requests.post("http://127.0.0.1:5001/search_products", json={"search_term": search_term})
+        search_products = search_products.json()
+        return render_template("blank1.html", message = search_products)
 
 
 # View all products on the platform
@@ -42,6 +47,12 @@ def all_products():
     all_products = request.get("http://127.0.0.1:5001/recent_products")
     response = all_products.json()
     return render_template("recent_products.html", all_products = response )
+
+
+
+
+
+
 
 # View all products listed by a user
 @app.route("/getProductByUserId/<string:userID>", methods=["GET"])
@@ -59,12 +70,12 @@ def getProductByUserId(userID):
 @app.route("/get_product_info/<string:productID>", methods=["GET"])
 def get_product_info_by_productID(productID):
     url = "http://127.0.0.1:5001/get_product_info/" + productID
-    product_info = requests.get(str(url))
+    product_info = requests.get(url)
 
     response = product_info.json()
     print(response)
     # {"productID": self.productID, "sellerID": self.userID, "productName": self.productName, "productType": self.productType,"productDesc": self.productDesc, "productStatus": self.productStatus, "meetup": self.meetup }
-    return render_template("view_product.html", product_info=response)
+    return render_template("blank1.html", message=response)
     
 
 
@@ -106,18 +117,17 @@ def seller_view_offers(productID):
         return change_bid_status['message'], update_product['message']
 
 #Place a bid for a product
-@app.route("/place_bid/<string:productID>", methods=['POST',"GET"])
-def place_bids(productID):
+@app.route("/place_bid/<string:sellerID>/<string:productID>", methods=['POST',"GET"])
+def place_bids(sellerID,productID):
     if request.method == "GET":
         return render_template("place_bid.html")
     if request.method == 'POST':
         print(request.form)
         bidAmt = request.form['bidAmt']
         meetup = request.form['meetup']
-        place_a_bid = requests.post('http://127.0.0.1:5004/place_bid/', json={"userID":userID, "productName": productName, "productType":productType, "productDesc": productDesc, "meetup":meetup})
+        place_a_bid = requests.post('http://127.0.0.1:5004/place_bid/', json={"productID":productID, "buyerID": userID, "sellerID":sellerID, "bidAmt": bidAmt, "meetup":meetup})
         response = place_a_bid.json()
-        if response['message'] == "successful":
-            return "successfully placed a bid"
+        return render_template("blank1.html", message = response['message'])
 
 # View all bids placed by user
 @app.route("/views_bid_and_status_by_userID", methods=["GET"])
@@ -138,7 +148,7 @@ def transfer():
     productName = "Apple airpods"
     transfer_request = requests.post(url, json={"bidID": bidID,"bidAmt": bidAmt,"productName": productName})
     response = transfer_request.json()
-    return response
+    return render_template("blank1.html", message=response)   
 
 
 
