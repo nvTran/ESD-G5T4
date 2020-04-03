@@ -75,12 +75,12 @@ def update_product_status():
         content = request.json
         productID = content['productID']
 
-    product_queried = Product.query.filter_by(productID =productID).first()
-    product_queried.productStatus = 'closed'
-    db.session.commit()
+        product_queried = Product.query.filter_by(productID =productID).first()
+        product_queried.productStatus = 'closed'
+        db.session.commit()
 
-    
-    return jsonify({"message": "updated"})
+        
+        return jsonify({"message": "product status updated"})
 
 @app.route("/get_product_info/<string:productID>", methods=["GET"])
 def get_product_info_by_productID(productID):
