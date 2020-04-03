@@ -129,7 +129,8 @@ def paypal_payment():
                 # https://github.com/paypal/rest-api-sdk-python/pull/58
                 redirect_url = str(link.href)
                 print("Redirect for approval: %s" % (redirect_url))
-                return redirect(redirect_url)
+                return jsonify({"redirect_url": redirect_url, "paymentID": payment.id })
+
     else:
         print("Error while creating payment:")
         print(payment.error)

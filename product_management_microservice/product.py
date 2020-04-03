@@ -47,9 +47,18 @@ def recent_products():
     all_products = Product.query.limit(20).all()
     return jsonify({"all_products": [product.json() for product in all_products]}) 
 
-# @app.route("/all_product/<string:userID>")
-# def all_products(userID):
-#     return render_template("all_products.html", userID = userID)
+@app.route("/search_products", methods=["POST"])
+def search_products():
+    if request.method == "POST":
+        content = request.json
+        search_term = content['search_term']
+        search_term = "%{}%".format(search_term)
+        search_products = Product.query.filter(Product.productName.like(search_term)).all()
+        if not search_products:
+            return jsonify({"message": "No product found with the search term"})
+        else:
+            return jsonify({"message": "product found", "search_products": [product.json() for product in search_products]})
+
 
 @app.route("/getProductByUserId/<string:userID>", methods=["GET"])
 def getProductByUserId(userID):
@@ -78,7 +87,7 @@ def get_product_info_by_productID(productID):
     if request.method == 'GET':        
         product = Product.query.filter_by(productID=productID).first()
         if product:
-            return jsonify({"message": [product.json() ]})
+            return jsonify({"message": "product found", "product": [product.json()]})
         return jsonify({"message": "product not found" })
 
 

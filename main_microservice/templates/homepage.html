@@ -72,8 +72,10 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
       	<div class="searchbar">
-      		<input type="text" placeholder="Search..">
-      		<button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+          <form method="POST">
+      		  <input type="text" name="search_term" id="search_term" placeholder="Search for a product">
+            <button class="btn btn-success" type="submit" value="submit"><i class="fa fa-search"></i></button>
+          </form>
       	</div>
       	
         <ul class="navbar-nav ml-auto">
@@ -172,7 +174,7 @@
                 "</a>" +
                 "<div class='card-body'>" +
                   "<h4 class='card-title'>" +
-                    "<a href='#' class='prodName'>"+ obj.productName + 
+                    "<a href= 'place_bid/" + obj.sellerID + "/"+ obj.productID +"''" +" class='prodName'>"+ obj.productName + 
                     "</a>" +
                   "</h4>" +
                   "<h5>"+obj.meetup+"</h5>" +
