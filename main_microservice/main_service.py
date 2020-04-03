@@ -140,15 +140,16 @@ def get_bids_and_status_by_buyerID():
         return render_template("bid_status.html", all_bids=all_bids)
     
 
-@app.route("/transfer", methods=["GET"])
-def transfer():
-    url = "http://127.0.0.1:5005/paypal_payment"
-    bidID = "0001"
-    bidAmt = 3
-    productName = "Apple airpods"
-    transfer_request = requests.post(url, json={"bidID": bidID,"bidAmt": bidAmt,"productName": productName})
-    response = transfer_request.json()
-    return render_template("blank1.html", message=response)   
+@app.route("/transfer/<string:bidID>/<string:bidAmt>", methods=["GET","POST"])
+def transfer(bidID,bidAmt):
+    if request.method == "GET":
+        return render_template("sure_to_transfer.html")
+
+    if request.method == "POST":
+        url = "http://127.0.0.1:5005/paypal_payment"
+        transfer_request = requests.post(url, json={"bidID": bidID,"bidAmt": bidAmt,"productName": "ke me may"})
+        response = transfer_request.json()
+        return render_template("blank1.html", message=response)   
 
 
 

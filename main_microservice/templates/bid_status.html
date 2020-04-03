@@ -114,7 +114,8 @@
 		let allItems;
 		var bids = JSON.parse('{{ all_bids | tojson | safe}}');
 		for (obj of bids.all_bids) {
-			let item =
+			if (obj.bidStatus != "successful") {
+				let item =
 			"<tr>" +
 				"<th scope='row'>"+obj.bidID+"</th>" +
 				"<td>"+obj.sellerID+"</td>" +
@@ -125,6 +126,24 @@
 			"</tr>";
 			allItems += item;
 			$(".item-list").append(item);
+			}
+			else {
+				let item =
+			"<tr>" +
+				"<th scope='row'>"+obj.bidID+"</th>" +
+				"<td>"+obj.sellerID+"</td>" +
+				"<td>"+obj.bidDateTime+"</td>" +
+				"<td>"+obj.bidAmt+"</td>" +
+				"<td>"+ "<a href='/transfer/" + obj.bidID +"/" + obj.bidAmt  
+       					+ "'>Transfer</a></td>" +
+				"<td>"+obj.meetup+"</td>" +
+			"</tr>";
+			allItems += item;
+			$(".item-list").append(item);
+			}
+
+
+			
 
 		}
 	</script>
