@@ -94,7 +94,7 @@ def post_new_product():
 
         post_new_product_request = requests.post('http://127.0.0.1:5001/post_new_product', json={"userID":userID, "productName": productName, "productType":productType, "productDesc": productDesc, "meetup":meetup})
         response = post_new_product_request.json()
-        return response['message']
+        return render_template("blank1.html", message=  response['message'])
 
 
 #View all offers for your products
@@ -143,7 +143,7 @@ def get_bids_and_status_by_buyerID():
     else:
         return render_template("bid_status.html", all_bids= "No bid found")
     
-
+# transfer money to seller who accepted your bid.
 @app.route("/transfer/<string:bidID>/<string:bidAmt>", methods=["GET","POST"])
 def transfer(bidID,bidAmt):
     if request.method == "GET":
