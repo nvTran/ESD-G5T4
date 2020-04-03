@@ -38,7 +38,8 @@ def homepage():
         search_term = request.form['search_term']
         search_products = requests.post("http://127.0.0.1:5001/search_products", json={"search_term": search_term})
         search_products = search_products.json()
-        return render_template("blank1.html", message = search_products)
+        if search_products['message'] == "product found":
+            return render_template("search.html", search_products = search_products)
 
 
 # View all products on the platform
@@ -106,8 +107,8 @@ def seller_view_offers(productID):
         return render_template("view_offers.html", offers = offers)
     if request.method == "POST":
         # Update bid status
-        bidID_selected = request.form['bidID']
-        url = "http://127.0.0.1:5004/chang_bid_status/" + productID + bidID_selected
+        bidID = request.form
+        url = "http://127.0.0.1:5004/change_bid_status/" + productID +"/"+ bidID
         register_selected_bid = request.post(url)
         change_bid_status = register_selected_bid.json()
         # Update product status
@@ -138,6 +139,8 @@ def get_bids_and_status_by_buyerID():
     all_bids = all_bids.json()
     if all_bids['message'] == "successful":
         return render_template("bid_status.html", all_bids=all_bids)
+    else:
+        return render_template("bid_status.html", all_bids= "No bid found")
     
 
 @app.route("/transfer/<string:bidID>/<string:bidAmt>", methods=["GET","POST"])
@@ -148,8 +151,8 @@ def transfer(bidID,bidAmt):
     if request.method == "POST":
         url = "http://127.0.0.1:5005/paypal_payment"
         transfer_request = requests.post(url, json={"bidID": bidID,"bidAmt": bidAmt,"productName": "ke me may"})
-        response = transfer_request.json()
-        return render_template("blank1.html", message=response)   
+        transfer_request = transfer_request.json()
+        return render_template("blank1.html", transfer_request=transfer_request)   
 
 
 

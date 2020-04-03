@@ -114,17 +114,34 @@
 		let allItems;
 		var bids = JSON.parse('{{ offers | tojson | safe}}');
 		for (obj of bids.all_bids) {
-			let item =
-			"<tr>" +
-				"<th scope='row'>"+obj.bidID+"</th>" +
-				"<td>"+obj.sellerID+"</td>" +
-				"<td>"+obj.bidDateTime+"</td>" +
-				"<td>"+obj.bidAmt+"</td>" +
-				"<td>"+obj.bidStatus+"</td>" +
-				"<td>"+obj.meetup+"</td>" +
-			"</tr>";
-			allItems += item;
-			$(".item-list").append(item);
+			if(obj.bidStatus == "successful"){
+				let item =
+				"<tr>" +
+					"<th scope='row'>"+obj.bidID+"</th>" +
+					"<td>"+obj.sellerID+"</td>" +
+					"<td>"+obj.bidDateTime+"</td>" +
+					"<td>"+obj.bidAmt+"</td>" +
+					"<td>"+obj.bidStatus+"</td>" +
+					"<td>"+obj.meetup+"</td>" +
+				"</tr>";
+				allItems += item;
+				$(".item-list").append(item);
+			} else {
+				let item =
+				"<tr>" +
+					"<th scope='row'>"+obj.bidID+"</th>" +
+					"<td>"+obj.sellerID+"</td>" +
+					"<td>"+obj.bidDateTime+"</td>" +
+					"<td>"+obj.bidAmt+"</td>" +
+					"<td>"+obj.bidStatus+"</td>" +
+					"<td>"+obj.meetup+"</td>" +
+					"<td>"+ "<a href='/view_offers/" + obj.productID +"/"+ obj.bidID  
+       					+ "'>Accept</a></td>" +
+				"</tr>";
+				allItems += item;
+				$(".item-list").append(item);
+			}
+			
 
 		}
 	</script>

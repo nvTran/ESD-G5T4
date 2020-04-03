@@ -77,7 +77,7 @@ def place_bids():
         # redirect to product page with status change
         return jsonify({"message":"bid added successfully"})
  
-@app.route("/chang_bid_status/<string:productID>/<string:bidID>", methods=["GET"])
+@app.route("/change_bid_status/<string:productID>/<string:bidID>", methods=["GET"])
 def change_bid_status_for_successful_bids(productID,bidID):
     all_bids = ListBid.query.filter_by(productID=productID).all()
     if all_bids: 
