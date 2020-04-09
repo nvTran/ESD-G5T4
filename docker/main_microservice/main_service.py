@@ -6,7 +6,6 @@ import uuid
 import datetime
 import googlemaps
 import requests
-from os import environ
 
 
 
@@ -14,7 +13,6 @@ model = None
 app = Flask(__name__)
 CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 userID = "christine"
