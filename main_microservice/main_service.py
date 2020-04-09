@@ -72,10 +72,7 @@ def getProductByUserId(userID):
 def get_product_info_by_productID(productID):
     url = "http://127.0.0.1:5001/get_product_info/" + productID
     product_info = requests.get(url)
-
     product_info = product_info.json()
-    
-    # {"productID": self.productID, "sellerID": self.userID, "productName": self.productName, "productType": self.productType,"productDesc": self.productDesc, "productStatus": self.productStatus, "meetup": self.meetup }
     return render_template("product_info.html", product_info=product_info, userID=userID)
     
 
