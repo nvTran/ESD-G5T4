@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>######</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- Custom styles for this template -->
+  <style type="text/css">
+  	body {
+	  padding-top: 56px;
+	}
+	.navbar{
+		height: 5em;
+	}
+	.side-bar-right, .side-bar-left{
+		margin-top: 3em;
+	}
+	.searchbar{
+		padding-left: 14em;
+	}
+	input[type=text] {
+	  padding: 6px;
+	  border: none;
+	  margin-top: 8px;
+	  font-size: 17px;
+	  width: 20em;
+	}
+	.search-container button {
+	  float: right;
+	  padding: 6px;
+	  margin-top: 8px;
+	  margin-right: 16px;
+	  background: #ddd;
+	  font-size: 17px;
+	  border: none;
+	  cursor: pointer;
+	}
+
+	.search-container button:hover {
+	  background: #ccc;
+	}
+	.btn{
+		padding: 6px;
+		margin-left: -5px;
+		vertical-align: unset;
+	}
+	.list-group{
+		margin-top: 1.5em;
+	}
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/homepage">ESELL</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+      	<div class="searchbar">
+      		<input type="text" placeholder="Search..">
+      		<button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+      	</div>
+      	
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" id="userID" href="#">Welcome {{userID}}
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Log Out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 side-bar-left">
+        <div class="list-group">
+          <a href="#" class="list-group-item">Post new product</a>
+          <a href="#" class="list-group-item">View bids you offered</a>
+          <a href="#" class="list-group-item">View bids offered for you</a>
+        </div>
+      </div>
+      <div class="col-lg-9 side-bar-right">
+        <div class="row item-list" id="item-list"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">ESD G5T4 Project</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript">
+  	let allItems;
+  	var product = JSON.parse('{{ recent_products | tojson | safe}}');
+  	for (var i = 0; i < product.all_products.length ; i++) {
+  		let item =
+  			"<div class='col-lg-4 col-md-6 mb-4'>" +
+	            "<div class='card h-100'>" +
+	              "<a href='#'>" +
+	              	"<img class='card-img-top' src='http://placehold.it/700x400' alt='>" +
+	              "</a>" +
+	              "<div class='card-body'>" +
+	                "<h4 class='card-title'>" +
+	                  "<a href='#' class='prodName'>Item One" + 
+	                  "</a>" +
+	                "</h4>" +
+	                "<h5>$24.99</h5>" +
+	                "<p class='card-text'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>" +
+	              
+	              "<div class='card-footer'>" +
+	                "<small class='text-muted'>&#9733; &#9733; &#9733; &#9733; &#9734;</small>" +
+	              "</div>" +
+	            "</div>" +
+          	"</div>";
+        allItems += item;
+  		$(".item-list").append(item);
+	     
+  	}
+  </script>
+
+</body>
+
+</html>

@@ -85,8 +85,9 @@ def change_bid_status_for_successful_bids(productID,bidID):
             if bid.bidID == bidID:
                 bid.bidStatus = 'successful'
                 db.session.commit()
-            bid.bidStatus = 'failed'
-            db.session.commit()
+            else:
+                bid.bidStatus = 'failed'
+                db.session.commit()
         return jsonify({"message": "successfully updated bid status for all bids"}), 200
     return jsonify({"message": "couldnot find any bids for the productID specified"}), 200
 
