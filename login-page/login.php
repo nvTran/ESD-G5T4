@@ -77,7 +77,7 @@ if(isset($pay_load)){
             'id' => $id,
             'name' => $name
         );
-        $url = 'localhost:5002/authenticate';
+        $url = '127.0.0.1:5002/authenticate';
         $content = json_encode($data);
 
         $curl = curl_init($url);
@@ -97,7 +97,9 @@ if(isset($pay_load)){
         }
         curl_close($curl);
         $response = json_decode($json_response, true);
-        header("Location:127.0.0.1:5002/homepage");
+        header("Location: http://localhost:5002/homepage");
+        // die();
+
      
         
     } else {
@@ -111,7 +113,7 @@ if(isset($pay_load)){
         );
         $data = json_encode($data);
         # Create a connection
-        $url = 'localhost:5002/authenticate';
+        $url = '127.0.0.1:5002/authenticate';
         $ch = curl_init($url);
         # Form data string
         $postString = http_build_query($data, '', '&');
@@ -121,7 +123,8 @@ if(isset($pay_load)){
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         # Get the response
         $response = curl_exec($ch);
-        header("Location:127.0.0.1:5002/homepage");
+        // header("Location: 127.0.0.1:5002/homepage");
+        header("Location: http://localhost:5002/homepage");
 }}   
 // client ID is 1038416313130-8kaejqp9740v9389dopqtrc3vqvks51c.apps.googleusercontent.com
 // client secret is tuTy7QTZ9f-Nfff1M_J47ddQ
@@ -157,7 +160,7 @@ if(isset($_POST['submit'])) {
         }
  
         if(isset($_SESSION['valid'])) {
-            header('Location: homepage.php');            
+            header("Location: http://localhost:5002/homepage");
         }
     }
 } 
