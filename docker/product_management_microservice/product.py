@@ -5,12 +5,14 @@ from flask_sqlalchemy import SQLAlchemy
 import googlemaps
 from datetime import datetime
 import uuid
+from os import environ
 
 
 model = None
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/listing'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 CORS(app)
 
@@ -112,4 +114,4 @@ def post_new_product():
         return "This is a page to post new product"
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)

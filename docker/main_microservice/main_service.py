@@ -13,26 +13,29 @@ model = None
 app = Flask(__name__)
 CORS(app)
 
-userID = 1
-userName = "Name"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+userID = "christine"
 @app.route("/authenticate", methods =["POST"])
 def authenticate():
     if request.method == "POST":
-        global userID
-        global userName
         content = request.json
         userID = content['id']
-        userName = content['name']
-        return "authenticated",201
+        username = content['username']
+        return "authenticated"
+
+
+
 
 # Home page that view links to all the functions and 
 @app.route("/homepage", methods =["GET","POST"])
 def homepage():
     if request.method == "GET":
+
         recent_products = requests.get("http://127.0.0.1:5001/recent_products")
         recent_products = recent_products.json()
 
-        return render_template("homepage.html", userName=userName, userID = userID, recent_products = recent_products)
+        return render_template("homepage.html", userID = userID, recent_products = recent_products)
     if request.method == "POST":
         search_term = request.form['search_term']
         search_products = requests.post("http://127.0.0.1:5001/search_products", json={"search_term": search_term})
@@ -152,5 +155,7 @@ def transfer(bidID,bidAmt):
         return render_template("blank1.html", transfer_request=transfer_request)   
 
 
+
+
 if __name__ == '__main__':
-    app.run(port=5002, debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)
