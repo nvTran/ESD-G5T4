@@ -32,7 +32,7 @@ def homepage():
         recent_products = requests.get("http://127.0.0.1:5001/recent_products")
         recent_products = recent_products.json()
 
-        return render_template("homepage.html", userID = userID, recent_products = recent_products)
+        return render_template("homepage.html", userName=userName, userID = userID, recent_products = recent_products)
     if request.method == "POST":
         search_term = request.form['search_term']
         search_products = requests.post("http://127.0.0.1:5001/search_products", json={"search_term": search_term})
@@ -150,8 +150,6 @@ def transfer(bidID,bidAmt):
         transfer_request = requests.post(url, json={"bidID": bidID,"bidAmt": bidAmt,"productName": "ke me may"})
         transfer_request = transfer_request.json()
         return render_template("blank1.html", transfer_request=transfer_request)   
-
-
 
 
 if __name__ == '__main__':

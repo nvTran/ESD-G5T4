@@ -187,7 +187,6 @@ else {
     echo "<a href='$auth_url'>Login Through Google </a>";
     echo "<br>";
     echo "<a href='./register.php'>Sign Up </a>";
-
 }
 ?>
 </body>
