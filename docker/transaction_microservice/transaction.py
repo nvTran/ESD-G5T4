@@ -76,8 +76,8 @@ def paypal_payment():
 
         # Redirect URLs
         "redirect_urls": {
-            "return_url": "http://127.0.0.1:5005/paypal_Return?success=true",
-            "cancel_url": "http://127.0.0.1:5005/paypal_Return?cancel=true"},
+            "return_url": "http://0.0.0.0:5005/paypal_Return?success=true",
+            "cancel_url": "http://0.0.0.0:5005/paypal_Return?cancel=true"},
 
         "transactions": [{
 
