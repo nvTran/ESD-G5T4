@@ -13,7 +13,7 @@ model = None
 app = Flask(__name__)
 CORS(app)
 
-userID = 1
+userID = "hut76"
 userName = "Name"
 @app.route("/authenticate", methods =["POST"])
 def authenticate():
@@ -149,7 +149,7 @@ def transfer(bidID,bidAmt):
         url = "http://127.0.0.1:5005/paypal_payment"
         transfer_request = requests.post(url, json={"bidID": bidID,"bidAmt": bidAmt,"productName": "ke me may"})
         transfer_request = transfer_request.json()
-        return render_template("blank1.html", transfer_request=transfer_request)   
+        return render_template("blank3.html", transfer_request=transfer_request)   
 
 
 if __name__ == '__main__':
