@@ -15,17 +15,17 @@ CORS(app)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-userID = "christine"
+userID = 1
+userName = "Name"
 @app.route("/authenticate", methods =["POST"])
 def authenticate():
     if request.method == "POST":
+        global userID
+        global userName
         content = request.json
         userID = content['id']
-        username = content['username']
-        return "authenticated"
-
-
-
+        userName = content['name']
+        return "authenticated",201
 
 # Home page that view links to all the functions and 
 @app.route("/homepage", methods =["GET","POST"])
