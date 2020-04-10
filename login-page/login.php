@@ -126,8 +126,7 @@ if(isset($pay_load)){
         // header("Location: 127.0.0.1:5002/homepage");
         header("Location: http://localhost:5002/homepage");
 }}   
-// client ID is 1038416313130-8kaejqp9740v9389dopqtrc3vqvks51c.apps.googleusercontent.com
-// client secret is tuTy7QTZ9f-Nfff1M_J47ddQ
+
 
 
  session_start();
@@ -144,7 +143,7 @@ if(isset($_POST['submit'])) {
         echo "<a href='login.php'>Go back</a>";
     } else {
         $result = mysqli_query($mysqli, "SELECT * FROM login WHERE username='$user' AND password=md5('$pass')")
-        or die("Could not execute the select query.");
+        or die("incorrect username or password");
         
         $row = mysqli_fetch_assoc($result);
         
