@@ -77,19 +77,28 @@ if(isset($pay_load)){
             'id' => $id,
             'name' => $name
         );
-        $data = json_encode($data);
-        # Create a connection
         $url = 'localhost:5002/authenticate';
-        $ch = curl_init($url);
-        # Form data string
-        $postString = http_build_query($data, '', '&');
-        # Setting our options
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        # Get the response
-        $response = curl_exec($ch);
-        curl_close($ch);        
+        $content = json_encode($data);
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER,
+                array("Content-type: application/json"));
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
+
+        $json_response = curl_exec($curl);
+
+        $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        if ( $status != 201 ) {
+            die("Error: call to URL $url failed with status $status, response $json_response, curl_error " . curl_error($curl) . ", curl_errno " . curl_errno($curl));
+        }
+        curl_close($curl);
+        $response = json_decode($json_response, true);
+        header("Location:127.0.0.1:5002/homepage");
+     
         
     } else {
         // register user
@@ -112,6 +121,7 @@ if(isset($pay_load)){
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         # Get the response
         $response = curl_exec($ch);
+        header("Location:127.0.0.1:5002/homepage");
 }}   
 // client ID is 1038416313130-8kaejqp9740v9389dopqtrc3vqvks51c.apps.googleusercontent.com
 // client secret is tuTy7QTZ9f-Nfff1M_J47ddQ
