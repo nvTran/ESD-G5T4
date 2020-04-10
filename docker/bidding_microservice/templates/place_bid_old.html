@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+  <title>Place bid</title>
+  
+</head>
+
+<body>
+  <div class="container">
+    <form method="POST" >
+      <label for="bidAmt">Bid Amount:</label><br>
+      <input type="text" name="bidAmt" required>
+      <br>
+      <label>Meet-up location:</label><br>
+      <!-- <input type="text" name="meetup"><br> -->
+      <button onclick="showPosition()" id="demo">Get location</button>
+      <input type="text" id="longitude" name="longitude" value="" />
+      <input type="text" id="latitude" name="latitude" value="" />
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgHcefqn02VGMnzpAX3jBXoAoWvuLF3c0&callback=initMap"> </script>
+
+  <script>
+    
+    
+    function showPosition() {
+      event.preventDefault();
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              document.getElementById('longtitude').value = position.coords.longitude;
+              document.getElementById('latitude').value = position.coords.latitude;
+              alert(position.coords.longitude)
+              alert(position.coords.latitude)
+            });
+        } else {
+            alert("Sorry, your browser does not support HTML5 geolocation.");
+        }
+    }
+    
+
+  </script>
+</body>
+  
+</html>

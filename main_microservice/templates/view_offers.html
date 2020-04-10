@@ -69,6 +69,7 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
+
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item active">
 						<a class="nav-link" href="#">Welcome {{userID}}
@@ -87,7 +88,7 @@
 			<thead>
 				<tr>
 					<th scope="col">Bid ID</th>
-					<th scope="col">Seller ID</th>
+					<th scope="col">Buyer ID</th>
 					<th scope="col">Bid Date Time</th>
 					<th scope="col">Bid Amount</th>
 					<th scope="col">Bid Status</th>
@@ -107,37 +108,40 @@
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 		let allItems;
-		var bids = JSON.parse('{{ all_bids | tojson | safe}}');
+		var bids = JSON.parse('{{ offers | tojson | safe}}');
 		for (obj of bids.all_bids) {
-			if (obj.bidStatus != "successful") {
+			if(obj.bidStatus == "successful"){
 				let item =
-			"<tr>" +
-				"<th scope='row'>"+obj.bidID+"</th>" +
-				"<td>"+obj.sellerID+"</td>" +
-				"<td>"+obj.bidDateTime+"</td>" +
-				"<td>"+obj.bidAmt+"</td>" +
-				"<td>"+obj.bidStatus+"</td>" +
-				"<td>"+obj.meetup+"</td>" +
-			"</tr>";
-			allItems += item;
-			$(".item-list").append(item);
-			}
-			else {
+				"<tr>" +
+					"<th scope='row'>"+obj.bidID+"</th>" +
+					"<td>"+obj.buyerID+"</td>" +
+					"<td>"+obj.bidDateTime+"</td>" +
+					"<td>"+obj.bidAmt+"</td>" +
+					"<td>"+obj.bidStatus+"</td>" +
+					"<td>"+obj.meetup+"</td>" +
+				"</tr>";
+				allItems += item;
+				$(".item-list").append(item);
+			} else {
 				let item =
-			"<tr>" +
-				"<th scope='row'>"+obj.bidID+"</th>" +
-				"<td>"+obj.sellerID+"</td>" +
-				"<td>"+obj.bidDateTime+"</td>" +
-				"<td>"+obj.bidAmt+"</td>" +
-				"<td>"+ "<a href='/transfer/" + obj.bidID +"/" + obj.bidAmt  
-       					+ "'>Transfer</a></td>" +
-				"<td>"+obj.meetup+"</td>" +
-			"</tr>";
-			allItems += item;
-			$(".item-list").append(item);
+				"<tr>" +
+					"<th scope='row'>"+obj.bidID+"</th>" +
+					"<td>"+obj.buyerID+"</td>" +
+					"<td>"+obj.bidDateTime+"</td>" +
+					"<td>"+obj.bidAmt+"</td>" +
+					"<td>"+obj.bidStatus+"</td>" +
+					"<td>"+obj.meetup+"</td>" +
+					"<td>"+
+						"<form method='post'>" +
+							"<input type='hidden' name='bidID' value='" + obj.bidID + "'>" +
+							"<button type='submit'>Accept</button>"+
+						"</form>"
+					"<td>"+ "<a href='/view_offers/" + obj.productID +"/"+ obj.bidID  
+       					+ "'>Accept</a></td>" +
+				"</tr>";
+				allItems += item;
+				$(".item-list").append(item);
 			}
-
-
 			
 
 		}

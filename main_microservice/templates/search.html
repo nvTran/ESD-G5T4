@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>######</title>
+  <title>Search Result</title>
 
   <!-- Bootstrap core CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -71,19 +71,21 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
-      	<div class="searchbar">
-      		<input type="text" placeholder="Search..">
-      		<button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
-      	</div>
       	
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" id="userID" href="#">Welcome {{userID}}
+            <a class="nav-link" href="#">Home
               <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Log Out</a>
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
           </li>
         </ul>
       </div>
@@ -92,23 +94,33 @@
 
   <!-- Page Content -->
   <div class="container">
+
     <div class="row">
+
       <div class="col-lg-3 side-bar-left">
         <div class="list-group">
-          <a href="#" class="list-group-item">Post new product</a>
-          <a href="#" class="list-group-item">View bids you offered</a>
-          <a href="#" class="list-group-item">View bids offered for you</a>
+          <a href="/post_new_product" class="list-group-item">Post new product</a>
+          <a href="/getProductByUserId/{{userID}}" class="list-group-item">View products you listed</a>
+          <a href="/views_bid_and_status_by_userID" class="list-group-item">View bids offered by you</a>
         </div>
       </div>
+      <!-- /.col-lg-3 -->
       <div class="col-lg-9 side-bar-right">
-        <div class="row item-list" id="item-list"></div>
+        <div class="row item-list" id="item-list">
+
+        </div>
       </div>
+      <!-- /.col-lg-9 -->
+
     </div>
+
   </div>
+  <!-- /.container -->
+
   <!-- Footer -->
   <footer class="py-5 bg-dark">
     <div class="container">
-      <p class="m-0 text-center text-white">ESD G5T4 Project</p>
+      <p class="m-0 text-center text-white">G5T4 ESD Project</p>
     </div>
     <!-- /.container -->
   </footer>
@@ -117,32 +129,32 @@
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript">
-  	let allItems;
-  	var product = JSON.parse('{{ recent_products | tojson | safe}}');
-  	for (var i = 0; i < product.all_products.length ; i++) {
-  		let item =
-  			"<div class='col-lg-4 col-md-6 mb-4'>" +
-	            "<div class='card h-100'>" +
-	              "<a href='#'>" +
-	              	"<img class='card-img-top' src='http://placehold.it/700x400' alt='>" +
-	              "</a>" +
-	              "<div class='card-body'>" +
-	                "<h4 class='card-title'>" +
-	                  "<a href='#' class='prodName'>Item One" + 
-	                  "</a>" +
-	                "</h4>" +
-	                "<h5>$24.99</h5>" +
-	                "<p class='card-text'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>" +
-	              
-	              "<div class='card-footer'>" +
-	                "<small class='text-muted'>&#9733; &#9733; &#9733; &#9733; &#9734;</small>" +
-	              "</div>" +
-	            "</div>" +
-          	"</div>";
+    let allItems;
+    var product = JSON.parse('{{ search_products | tojson | safe}}');
+    for (obj of product.search_products) {
+      let item =
+        "<div class='col-lg-4 col-md-6 mb-4'>" +
+              "<div class='card h-100'>" +
+                "<a href='#'>" +
+                  "<img class='card-img-top' src='http://placehold.it/700x400' alt='>" +
+                "</a>" +
+                "<div class='card-body'>" +
+                  "<h4 class='card-title'>" +
+                    "<a href= 'get_product_info/"  + obj.productID +"''" +" class='prodName'>"+ obj.productName + 
+                    "</a>" +
+                  "</h4>" +
+                  "<h5>"+obj.meetup+"</h5>" +
+                  "<p class='card-text'>"+obj.productDesc+"</p>" +
+                
+                "<div class='card-footer'>" +
+                  "<small class='text-muted'>"+obj.productStatus+"</small>" +
+                "</div>" +
+              "</div>" +
+            "</div>";
         allItems += item;
-  		$(".item-list").append(item);
-	     
-  	}
+      $(".item-list").append(item);
+       
+    }
   </script>
 
 </body>

@@ -5,11 +5,11 @@ from flask_sqlalchemy import SQLAlchemy
 import uuid
 import datetime
 import googlemaps
-
+from os import environ
 
 model = None
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/bidding'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
@@ -103,4 +103,4 @@ def get_bids_and_status_by_buyerID(buyerID):
 
 
 if __name__ == '__main__':
-    app.run(port=5004, debug=True)
+    app.run(host='0.0.0.0', port=5004, debug=True)

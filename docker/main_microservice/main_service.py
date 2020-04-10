@@ -13,15 +13,16 @@ model = None
 app = Flask(__name__)
 CORS(app)
 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 userID = "christine"
 @app.route("/authenticate", methods =["POST"])
 def authenticate():
     if request.method == "POST":
         content = request.json
-        print(content)
         userID = content['id']
-        username = content['name']
-        return "authenticated",201
+        username = content['username']
+        return "authenticated"
 
 
 
@@ -157,4 +158,4 @@ def transfer(bidID,bidAmt):
 
 
 if __name__ == '__main__':
-    app.run(port=5002, debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)

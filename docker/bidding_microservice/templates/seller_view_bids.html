@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>View a product</title>
+<title>View bids</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script 
 src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -17,20 +17,25 @@ src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
 integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
 crossorigin="anonymous">    
     // get all bids variables from Flask
-    
+    var all_bids = '{{all_bids}}';
 </script>
 </head>
-<body>
-    <h1>Product information</h1>
-    <h2>{{ all_products }} </h2>
-    <div id="print"></div>
-
-    <script type="text/javascript">
-    	var product = JSON.parse('{{ all_products | tojson | safe}}');
-    	document.getElementById('print').innerHTML = product
+    <h1>This is a page for sellers to view bids for their products</h1>
+    <script>
+        if (all_bids == null) {
+            return ""
+        }
     </script>
-
-
-    
+    <table border="1px solid black">
+        <tr>
+            <th>products</th>
+            <th>description</th>
+            <th>date listed</th>
+            <th>listing end date</th>
+            <th>bid amount</th>
+        </tr>
+    </table>
 </body>
 </html>
+
+

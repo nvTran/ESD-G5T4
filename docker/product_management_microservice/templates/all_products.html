@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>View a product</title>
+<title>All products</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script 
 src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -20,17 +20,12 @@ crossorigin="anonymous">
     
 </script>
 </head>
-<body>
-    <h1>Product information</h1>
-    <h2>{{ all_products }} </h2>
-    <div id="print"></div>
+    <h1>This is a page to see all products of a seller</h1>
 
-    <script type="text/javascript">
-    	var product = JSON.parse('{{ all_products | tojson | safe}}');
-    	document.getElementById('print').innerHTML = product
-    </script>
 
 
     
 </body>
 </html>
+
+
