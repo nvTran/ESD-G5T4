@@ -1,2 +1,3 @@
 # ESD-G5T4
-Enterprise Solution Development
+Simple Flask Application for school module called Enterprise Solution Development.
+
